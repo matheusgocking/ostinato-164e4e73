@@ -1,0 +1,30 @@
+/* Tokens do Rastro (14/11/2026): os únicos tamanhos que o CSS usa. Valor novo entra aqui primeiro, nunca solto no CSS.
+   Vem antes de base.css. Modelos: Radix Themes (passos de letra, espaço e raio), Primer (alturas de controle),
+   Carbon (durações e curvas). A folha do prontuário e os documentos (.paper, .folha) ficam fora: imitam o Word. */
+:root{
+  /* letra: 10 passos. 15 é o corpo do app; 16 é o mínimo em campo (abaixo disso o iPhone dá zoom). */
+  --fs-1:12px; --fs-2:13px; --fs-3:14px; --fs-4:15px; --fs-5:16px;
+  --fs-6:18px; --fs-7:21px; --fs-8:26px; --fs-9:30px; --fs-10:40px;
+
+  /* espaço: escala de 4 (com 2 e 6 para ajuste fino). O número é o tamanho em px. */
+  --sp-2:2px; --sp-4:4px; --sp-6:6px; --sp-8:8px; --sp-12:12px; --sp-16:16px; --sp-20:20px;
+  --sp-24:24px; --sp-32:32px; --sp-40:40px; --sp-48:48px; --sp-64:64px; --sp-80:80px;
+
+  /* raio (Ostinato, 23/11/2026): a escala dos DESIGN.md de Notion e Claude (awesome-design-md), 4, 8, 12, 16 e 24. */
+  --r:8px;
+  --r-xs:4px;   /* bloco da agenda, detalhe pequeno */
+  --r-sm:8px;   /* botão, campo */
+  --r-md:12px;  /* menu, cartão */
+  --r-lg:16px;  /* janela, tabela */
+  --r-xl:24px;  /* casca do app, menu lateral */
+  --r-full:999px;
+
+  /* altura de botão e campo: três tamanhos */
+  --h-sm:32px; --h-md:40px; --h-lg:48px;
+
+  /* movimento: só em resposta a um toque. Rápido para hover e pressionar, médio para abrir menu e janela. */
+  --dur-1:.1s; --dur-2:.2s; --dur-3:.32s;
+  --ease-out:cubic-bezier(.16,1,.3,1);  /* entrar (a curva da Sintropia) */
+  --ease-in:cubic-bezier(.4,0,1,1);     /* sair */
+}
+@media (prefers-reduced-motion: reduce){ :root{--dur-1:0s; --dur-2:0s; --dur-3:0s} }

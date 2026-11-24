@@ -1,0 +1,172 @@
+/* Painel de pontos (Hoje versão 4, js/hoje.js, 18/11/2026). O visual sai de uma coisa só do Rastro: os pontos.
+   Um número grande (o mostrador) e o dia como um quadro com os cinco pontos de cada sessão.
+   Sem cartão, sem sombra, sem rosto: fios finos e pontos. Vale também na abertura do site (.pn-site). */
+
+/* ---- o número do mostrador: letra de verdade (19/11/2026; antes era desenhado em pontos) ---- */
+.pm{flex:none;font-family:var(--display);font-weight:500;font-variant-numeric:lining-nums tabular-nums;color:var(--ink);white-space:nowrap}
+.pm-g{font-size:104px;line-height:.82;letter-spacing:-.035em;font-optical-sizing:auto}
+/* um movimento só, ao entrar: o número aparece */
+.pn-liga .pm-g{animation:pn-acende .5s ease both}
+@keyframes pn-acende{from{opacity:0}}
+
+/* ---- topo: mostrador e legenda ---- */
+.pn{max-width:940px}
+.hj .pn-data{margin:0 0 var(--sp-24);font-size:var(--fs-3);line-height:1.5;font-weight:400;color:var(--muted);letter-spacing:0}
+.pn-topo{display:flex;align-items:flex-end;gap:var(--sp-32);flex-wrap:wrap;padding-bottom:var(--sp-32)}
+.pn-cap{min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:var(--sp-2)}
+.pn-c1{margin:0;font-size:var(--fs-4);color:var(--muted)}
+.pn-c2{margin:0;padding:0;background:none;border:0;text-align:left;font:600 var(--fs-9)/1.1 var(--display);letter-spacing:-.02em;color:var(--ink)}
+button.pn-c2{cursor:pointer} button.pn-c2:hover{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px}
+.pn-c3{margin:var(--sp-6) 0 0;font-size:var(--fs-3);color:var(--muted)}
+
+/* ---- o quadro do dia ---- */
+.pn-q{border-top:1.5px solid var(--ink)}
+.pn-qh,.pn-r{display:grid;grid-template-columns:64px minmax(0,1fr) minmax(150px,420px) 88px;align-items:center;column-gap:var(--sp-16)}
+.pn-qh{min-height:36px;font-size:var(--fs-1);color:var(--muted)}
+.pn-cols,.pn-pts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));justify-items:center}
+.pn-cols i{font-style:normal}
+.pn-r{position:relative;width:100%;min-height:60px;padding:0;background:none;border:0;border-top:1px solid var(--vd-fio,var(--line));text-align:left;color:var(--ink);font-size:var(--fs-5)}
+button.pn-r{cursor:pointer}
+button.pn-r:hover{background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.pn-r .h{font-weight:600;font-variant-numeric:tabular-nums}
+.pn-r .n{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pn-r.feita .h,.pn-r.feita .n{color:var(--muted);font-weight:500}
+.pn-r.comp .n{font-weight:400;color:var(--muted)}
+.pn-r.agora .h{color:var(--accent)}
+.pn-r.agora::after{content:"";position:absolute;left:0;bottom:-1px;height:2px;width:var(--pg,0%);background:var(--accent);transition:width 1s linear}
+.pn-pts b{position:relative;width:100%;height:18px}
+.pn-pts b::after{content:"";position:absolute;left:50%;top:50%;box-sizing:border-box;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;border:2px solid var(--dot)}
+.pn-pts b + b::before{content:"";position:absolute;top:50%;left:calc(-50% + 11px);width:calc(100% - 22px);height:2px;margin-top:-1px;border-radius:2px;background:var(--dot)}
+.pn-pts b.d::after{background:var(--ink);border-color:var(--ink)}
+.pn-pts b.d + b.d::before,.pn-pts b.d + b.x::before{background:var(--ink)}
+.pn-pts b.x::after{background:var(--bad);border-color:var(--bad)}
+.pn-pts b.r::after{border-color:var(--bad)}
+.pn-pts b.n::after{width:6px;height:6px;margin:-3px 0 0 -3px;border:0;background:var(--dot)}
+.pn-a{justify-self:end;font-size:var(--fs-3);font-weight:600;color:var(--accent);white-space:nowrap}
+.pn-a.w{color:var(--warn)}
+.pn-r.agora .pn-a{color:var(--accent);font-weight:700}
+.pn-x{padding:0 0 var(--sp-20) calc(64px + var(--sp-16));animation:pn-abre var(--dur-2) var(--ease-out)}
+.pn-x p{margin:0 0 var(--sp-12);font-size:var(--fs-3);color:var(--muted)}
+@keyframes pn-abre{from{opacity:0;transform:translateY(-4px)}}
+.pn-leg{display:none;margin:var(--sp-12) 0 0;font-size:var(--fs-1);color:var(--muted)}
+.pn-q{border-bottom:1px solid var(--vd-fio,var(--line))}
+
+/* ---- embaixo: o que ficou para trás e a semana ---- */
+.pn-baixo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--sp-48);align-items:start;margin-top:var(--sp-40)}
+.pn-baixo h2{margin:0 0 var(--sp-8);font-size:var(--fs-3);font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0}
+.pn-f{border-bottom:1px solid var(--vd-fio,var(--line))}
+.pn-f summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;min-height:52px;font-size:var(--fs-4)}
+.pn-f summary::-webkit-details-marker{display:none}
+.pn-f summary>i{font-style:normal;color:var(--muted);transition:transform var(--dur-2) var(--ease-out)}
+.pn-f[open] summary>i{transform:rotate(90deg)}
+.pn-f summary:hover{background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.pn-n{font-size:var(--fs-7);font-weight:600;font-variant-numeric:tabular-nums}
+.pn-f.k-receber .pn-n{color:var(--bad)} .pn-f.k-marcar .pn-n{color:var(--warn)}
+.pn-f .hj-cl{padding:0 0 var(--sp-8) 48px}
+.pn .hj-wd{border-radius:0}
+.pn .hj-wd.hoje{background:none;box-shadow:inset 0 -2px 0 var(--ink);color:var(--ink)}
+.pn .hj-wp i{width:10px;height:10px}
+
+/* ---- na abertura do site ---- */
+.hj-site.pn{max-width:none;margin-top:var(--sp-64)}
+.hj-site-card.pn{max-width:none;padding-block:0 var(--sp-64)}
+.pn-site .pn-c2{font-weight:500}
+
+@media (max-width:1100px){
+  .pn-qh{display:none} .pn-leg{display:block}
+  .pn-qh,.pn-r{grid-template-columns:56px minmax(0,1fr) minmax(120px,240px) 76px}
+}
+@media (max-width:700px){
+  .pm-g{font-size:72px}
+  .pn-topo{gap:var(--sp-16);padding-bottom:var(--sp-24)}
+  .pn-c2{font-size:var(--fs-8)}
+  .pn-qh,.pn-r{grid-template-columns:48px minmax(0,1fr) 112px;column-gap:var(--sp-12)}
+  .pn-r{font-size:var(--fs-4)} .pn-a{display:none}
+  .pn-pts b::after{width:12px;height:12px;margin:-6px 0 0 -6px}
+  .pn-pts b + b::before{left:calc(-50% + 8px);width:calc(100% - 16px);height:1.5px}
+  .pn-pts b.n::after{width:5px;height:5px;margin:-2.5px 0 0 -2.5px}
+  .pn-x{padding-left:calc(48px + var(--sp-12))}
+  .pn-baixo{grid-template-columns:minmax(0,1fr);gap:var(--sp-32);margin-top:var(--sp-32)}
+  .hj-site.pn{margin-top:var(--sp-40)} .hj-site-card.pn{padding-bottom:var(--sp-40)}
+}
+@media (prefers-reduced-motion: reduce){ .pn-liga .pm-g,.pn-x{animation:none} .pn-r.agora::after{transition:none} }
+
+/* ---- comparação sem vidro (?skin=liso): fundo liso, sem manchas ---- */
+:root[data-skin="liso"] body{background:var(--desk)}
+
+/* ---- o mesmo desenho nas outras telas (18/11/2026, ?v=26) ---- */
+.pn-ct{margin:0;font-size:var(--fs-7);font-weight:600;line-height:1.2}
+.pn-r .n small{margin-left:var(--sp-8);font-size:var(--fs-2);font-weight:400;color:var(--muted)}
+.pn-r .n small.c-warn{color:var(--warn);font-weight:600}
+.pn .btnrow{margin-top:var(--sp-24)}
+.main > .pn-topo{padding-bottom:var(--sp-8)}
+@media (max-width:700px){ .pn-r .n small{display:block;margin-left:0} .pn-ct{font-size:var(--fs-6)} }
+/* título das outras telas (Prontuário): tamanho de título de tela, com respiro antes do mostrador */
+.main .pn > h1.pn-data:not(.hj *){margin:0 0 var(--sp-24);font-size:var(--fs-8);line-height:1.15;font-weight:700;color:var(--ink)}
+
+/* ---- aniversários (19/11/2026): chapeuzinho, aviso de 7 dias e lista do mês ---- */
+.chapeu{width:18px;height:18px;flex:none;color:var(--accent)}
+.nv{display:inline-flex;vertical-align:-1px;margin-left:4px}
+.wk-h .nv,.strip7 .nv{margin-left:3px}
+.nv-faixa{margin-top:var(--sp-24)}
+.nv-l{display:flex;align-items:center;gap:var(--sp-12);margin:0;min-height:48px;border-bottom:1px solid var(--vd-fio,var(--line));font-size:var(--fs-4)}
+.nv-l:first-child{border-top:1px solid var(--vd-fio,var(--line))}
+.nv-l>span{flex:1;min-width:0}
+.nv-q{padding:0;border:0;background:none;color:var(--ink);font-weight:600;cursor:pointer;text-align:left}
+.nv-q:hover{text-decoration:underline;text-underline-offset:4px}
+.nv-mes summary{list-style:none;display:flex;align-items:center;gap:var(--sp-8);min-height:44px;cursor:pointer;font-size:var(--fs-3);color:var(--muted)}
+.nv-mes summary::-webkit-details-marker{display:none}
+.nv-mes summary b{font-weight:600;color:var(--ink)}
+.nv-mes summary i{font-style:normal;margin-left:auto;transition:transform var(--dur-2) var(--ease-out)}
+.nv-mes[open] summary i{transform:rotate(90deg)}
+.nv-lista{list-style:none;margin:0;padding:0}
+.nv-lista li{display:grid;grid-template-columns:36px minmax(0,auto) minmax(0,1fr);align-items:baseline;gap:var(--sp-8);min-height:36px;font-size:var(--fs-3)}
+.nv-lista li b{font-size:var(--fs-5);font-weight:600;font-variant-numeric:tabular-nums}
+.nv-lista li span{color:var(--muted)}
+.nv-vazio{margin:0;font-size:var(--fs-3);color:var(--muted)}
+.nv-sec{margin-top:var(--sp-32)}
+.mo2-leg .lg-nv{display:inline-flex;align-items:center;gap:var(--sp-6)}
+/* data de nascimento na ficha e os três caminhos do novo paciente */
+.nasc-in{width:auto;min-height:var(--h-sm);padding:0 var(--sp-8);font-size:var(--fs-3)}
+.kv dd small{margin-left:var(--sp-8);color:var(--muted)}
+.np-tipo{display:flex;margin-bottom:var(--sp-16)} .np-tipo button{flex:1}
+@media (max-width:700px){ .nv-l{flex-wrap:wrap;gap:0 var(--sp-12);padding:var(--sp-8) 0} .nv-l .link{margin-left:26px} }
+
+/* ---- Hoje, versão 5 (19/11/2026): linhas que se leem como frase, um botão por linha (js/hoje.js, v5) ---- */
+.h5 .h5-t{margin:0;font:600 var(--fs-9)/1.1 var(--body);letter-spacing:-.02em;color:var(--ink)}
+.h5 .h5-d{margin:var(--sp-4) 0 var(--sp-32);font-size:var(--fs-4);color:var(--muted)}
+.h5-s{margin-bottom:var(--sp-40)}
+.h5-s>h2{margin:0 0 var(--sp-8);font-size:var(--fs-3);font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0}
+.h5-l{border-top:1.5px solid var(--ink);border-bottom:1px solid var(--vd-fio,var(--line))}
+/* a coluna do botão tem largura fixa, para hora, nome e situação ficarem alinhados em todas as linhas */
+.h5-r{display:grid;grid-template-columns:minmax(0,1fr) 148px;align-items:center;column-gap:var(--sp-16);min-height:60px;border-top:1px solid var(--vd-fio,var(--line))}
+.h5-l>.h5-r:first-child{border-top:0}
+.h5-m{flex:1;min-width:0;display:grid;grid-template-columns:64px minmax(0,1fr) minmax(0,1.3fr);align-items:center;column-gap:var(--sp-16);min-height:60px;padding:0;border:0;background:none;color:var(--ink);font:inherit;font-size:var(--fs-5);text-align:left}
+button.h5-m{cursor:pointer}
+button.h5-m:hover{background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.h5-m .h{font-weight:600;font-variant-numeric:tabular-nums}
+.h5-m .n{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.h5-m .st{font-size:var(--fs-4);color:var(--muted)}
+.h5-m .st.w{color:var(--warn);font-weight:600}
+.h5-r.feita .h,.h5-r.feita .n{color:var(--muted);font-weight:500}
+.h5-r.comp .n{font-weight:400;color:var(--muted)}
+.h5-r.agora .h,.h5-r.agora .st{color:var(--accent);font-weight:700}
+.h5-r>.btn{justify-self:end}
+.h5 .pn-x{padding-left:calc(64px + var(--sp-16))}
+.h5 .hj-amt{margin:0;color:var(--muted)}
+.pn-site.h5 .h5-l{border-top-width:1px}
+/* Próxima sessão no alto do Início (23/11/2026, proxH em js/hoje.js): uma frase e um botão */
+.ini-px{display:flex;align-items:center;gap:var(--sp-16);margin:calc(-1 * var(--sp-16)) 0 var(--sp-32);padding:var(--sp-12) var(--sp-16);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);border-radius:12px;background:color-mix(in srgb,var(--accent) 7%,transparent)}
+.ini-px>p{flex:1;min-width:0;margin:0;font-size:var(--fs-5);color:var(--ink)}
+.ini-px-r{display:block;font-size:var(--fs-3);color:var(--muted)}
+.ini-px b{font-weight:600}
+.ini-px-q{color:var(--muted)}
+.ini-px.agora .ini-px-r,.ini-px.agora .ini-px-q{color:var(--accent);font-weight:600}
+.ini-px>.btn{flex:none;min-height:44px}
+@media (max-width:700px){ .ini-px{flex-wrap:wrap} .ini-px>.btn{width:100%} }
+@media (max-width:700px){
+  .h5-m{grid-template-columns:52px minmax(0,1fr);column-gap:var(--sp-12);row-gap:2px;padding:var(--sp-8) 0}
+  .h5-m .st{grid-column:2;font-size:var(--fs-3)}
+  .h5-r{grid-template-columns:minmax(0,1fr) auto;column-gap:var(--sp-8)}
+  .h5 .pn-x{padding-left:0}
+}

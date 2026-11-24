@@ -1,0 +1,92 @@
+/* Financeiro (js/financeiro.js, 23/11/2026). Segue a linha do Início (.h5-* em painel.css): fio de tinta em cima da lista,
+   fio fino entre as linhas, 56 px de altura, letra de 16 px, um botão por linha. Sem cartão: a página é a superfície.
+   --fn-ac é a largura da coluna do botão; o total de cada seção para antes dela, alinhado com os valores das linhas. */
+.fn-topo,.fn-secs{--fn-ac:112px}
+.fn-topo{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:var(--sp-48);align-items:end}
+.fn-frase{font:500 var(--fs-8)/1.25 var(--body);letter-spacing:-.02em;max-width:23em;text-wrap:balance;font-variant-numeric:tabular-nums;color:var(--ink);padding-bottom:var(--sp-4)}
+.fn-bar{grid-column:1/-1;display:flex;gap:3px;height:10px;margin-top:var(--sp-24)}
+.fn-bar i{flex:0 0 0;min-width:8px;border-radius:var(--r-full)}
+/* mesmas cores da barra do resumo do Início (.ir-bar em mapa.css): o que entrou na cor da marca, a receber no lilás apagado, atraso no vermelho */
+.fn-bar .ok{background:var(--accent)} .fn-bar .ar{background:var(--bar2)} .fn-bar .at{background:var(--bad)}
+.fn-prev{grid-column:1/-1;margin-top:var(--sp-12);font-size:var(--fs-3);color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* os seis meses: cada barrinha é o recebido do mês e também o botão que abre o mês */
+.fn-meses{display:flex;flex-direction:column;align-items:flex-end}
+.fn-mcap{font-size:var(--fs-1);color:var(--muted);margin:0 44px var(--sp-4) 0}
+.fn-mrow{display:flex;align-items:flex-end}
+.fn-mb{display:flex;align-items:flex-end;gap:2px}
+.fn-mes{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:var(--sp-6);width:44px;height:88px;padding:0 0 var(--sp-2);border:0;border-radius:var(--r-sm);background:none;color:var(--muted);font-size:var(--fs-1);line-height:1.2}
+.fn-mes i{display:block;width:22px;border-radius:4px 4px 2px 2px;background:color-mix(in srgb,var(--ink) 20%,transparent);transition:background-color var(--dur-1) ease}
+button.fn-mes:hover{color:var(--ink)} button.fn-mes:hover i{background:color-mix(in srgb,var(--ink) 45%,transparent)}
+.fn-mes.on{color:var(--ink);font-weight:600} .fn-mes.on i{background:var(--accent)}
+.fn-seta{width:44px;height:44px;margin-bottom:var(--sp-20);display:grid;place-items:center;border:0;border-radius:var(--r-sm);background:none;color:var(--muted);font-size:var(--fs-7);line-height:1}
+.fn-seta:hover{color:var(--ink);background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.fn-volta{min-height:32px;font-size:var(--fs-2);margin-right:44px}
+.fn-mes:focus-visible,.fn-seta:focus-visible,.fn-rm:focus-visible,.fn-sec>summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+
+/* seções: o que fazer primeiro (em atraso, a receber); o resto fechado, a um toque */
+.fn-secs{display:flex;flex-direction:column;gap:var(--sp-32);min-width:0}
+.fn-sec{min-width:0}
+.fn-sec h2{margin:0;font-size:var(--fs-5);font-weight:600;letter-spacing:0;line-height:1.5}
+.fn-sec>h2,.fn-sec>summary h2{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;column-gap:var(--sp-16)}
+.fn-sec>h2{grid-template-columns:minmax(0,1fr) auto var(--fn-ac);padding-bottom:var(--sp-8);border-bottom:1.5px solid var(--ink)}
+.fn-sec>summary{display:grid;grid-template-columns:minmax(0,1fr) var(--fn-ac);align-items:center;column-gap:var(--sp-16);min-height:56px;list-style:none;cursor:pointer;border-bottom:1px solid var(--vd-fio,var(--line))}
+.fn-sec>summary::-webkit-details-marker{display:none}
+.fn-sec>summary:hover{background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.fn-sec[open]>summary{border-bottom:1.5px solid var(--ink)}
+details.fn-sec+details.fn-sec{margin-top:calc(var(--sp-32) * -1)}
+.fn-chev{width:16px;height:16px;justify-self:end;color:var(--muted);transition:transform var(--dur-2) var(--ease-out)}
+.fn-sec[open] .fn-chev{transform:rotate(90deg)}
+.fn-sec .tt{display:flex;align-items:baseline;gap:var(--sp-8);min-width:0}
+.fn-sec .tt i{flex:none;align-self:center;width:8px;height:8px;border-radius:50%;background:var(--bar2)}
+.fn-sec.at .tt i{background:var(--bad)} .fn-sec.ok .tt i{background:var(--accent)} .fn-sec.dp .tt i{background:none;box-shadow:inset 0 0 0 1.5px var(--dot)}
+.fn-sec .c{font-size:var(--fs-3);font-weight:400;color:var(--muted)}
+.fn-sec .tot{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* linhas */
+.fn-row{display:grid;grid-template-columns:minmax(0,1fr) var(--fn-ac);align-items:center;column-gap:var(--sp-16);min-height:56px;border-bottom:1px solid var(--vd-fio,var(--line))}
+.fn-row>.btn,.fn-row>.link{justify-self:end}
+.fn-row>.link{font-size:var(--fs-3)}
+.fn-rm{display:grid;grid-template-columns:64px minmax(0,1.1fr) minmax(0,1fr) auto;align-items:center;column-gap:var(--sp-16);width:100%;min-height:56px;padding:0;border:0;background:none;color:var(--ink);font:inherit;font-size:var(--fs-5);text-align:left}
+button.fn-rm{cursor:pointer}
+button.fn-rm:hover{background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.fn-rm .d{font-weight:600;font-variant-numeric:tabular-nums}
+.fn-rm .n{display:flex;align-items:center;min-width:0;font-weight:600}
+.fn-rm .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fn-rm .q{min-width:0;font-size:var(--fs-4);color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fn-rm .v{text-align:right;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.fn-row.pg .d,.fn-row.pg .n,.fn-row.pg .v{font-weight:500}
+.fn-row.pg .d{color:var(--muted)}
+.two>.fn-secs{--fn-ac:92px}
+.two>.fn-secs .fn-rm{grid-template-columns:56px minmax(0,1fr) auto}
+.two>.fn-secs .fn-rm .q{display:none}
+
+@media (max-width:900px){
+  .fn-topo{grid-template-columns:minmax(0,1fr);row-gap:var(--sp-24)}
+  .fn-meses{align-items:stretch}
+  .fn-mcap{margin:0 0 var(--sp-4) 44px}
+  .fn-mb{flex:1;justify-content:space-between}
+  .fn-mes{flex:1;width:auto;min-width:0}
+  .fn-volta{margin:0 0 0 44px;align-self:flex-start}
+  .fn-bar{margin-top:0}
+}
+.fn-busca{margin-top:var(--sp-4)}
+.fn-cel{display:none}
+@media (max-width:640px){
+  /* no celular "Lançar despesa" não cabe ao lado do título: vai para dentro do menu "…" */
+  .fn-desk{display:none} .mais-m .fn-cel{display:block}
+  .fn-topo{row-gap:var(--sp-16)} .fn-prev{margin-top:calc(var(--sp-4) * -1)}
+  .fn-topo,.fn-secs{--fn-ac:84px}
+  .fn-frase{font-size:var(--fs-7)}
+  .fn-row,.fn-sec>summary{column-gap:var(--sp-8)}
+  .fn-rm{grid-template-columns:48px minmax(0,1fr) auto;column-gap:var(--sp-12);row-gap:0;padding:var(--sp-8) 0}
+  .fn-rm .n{grid-column:2/-1}
+  .fn-rm .n .avm{display:none}
+  .fn-rm .d{grid-row:1/3;align-self:start;padding-top:2px}
+  .fn-rm .q{grid-column:2;font-size:var(--fs-3)}
+  .fn-rm .v{grid-column:3;font-size:var(--fs-4)}
+  .fn-sec>h2{grid-template-columns:minmax(0,1fr) auto}
+  .fn-sec>h2>span:last-child{display:none}
+  .fn-sec>summary{grid-template-columns:minmax(0,1fr) 20px}
+  .fn-sec .tt{white-space:nowrap}
+}

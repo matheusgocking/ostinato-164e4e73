@@ -1,0 +1,42 @@
+/* Caderno em markdown (js/caderno.js, 19/11/2026): anotações livres, com os modos Ler e Escrever do Obsidian. */
+.cdn{display:flex;flex-direction:column;min-height:0;flex:1}
+.cdn-bar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:var(--sp-12);margin-bottom:var(--sp-8)}
+.cdn-seg button{min-height:28px;padding:0 var(--sp-12);font-size:var(--fs-2)}
+.cdn-salvo{font-size:var(--fs-1);color:var(--muted)}
+.cdn-ler,.cdn-esc{flex:1;min-height:120px;overflow:auto;font-size:var(--fs-4);line-height:1.6;color:var(--ink)}
+.cdn-esc{width:100%;resize:none;border:0;border-radius:0;background:none;padding:0;outline:0;font-family:var(--body);font-size:var(--fs-5)}
+.cdn[data-modo="ler"] .cdn-esc,.cdn[data-modo="esc"] > .cdn-ler{display:none}
+.cdn[data-modo="ler"] .cdn-dica{display:none}
+.cdn-dica{flex:none;margin:var(--sp-8) 0 0;font-size:var(--fs-1);color:var(--muted)}
+.cdn-ler:focus-visible{outline-offset:4px}
+.cdn-vazio{color:var(--muted)}
+.cdn-ler p{margin:0 0 var(--sp-8)}
+.cdn-ler .cdn-h{margin:var(--sp-16) 0 var(--sp-6);font-weight:700;line-height:1.25;color:var(--ink)}
+.cdn-ler .cdn-h:first-child{margin-top:0}
+.cdn-ler .cdn-h1{font-size:var(--fs-7)} .cdn-ler .cdn-h2{font-size:var(--fs-6)} .cdn-ler .cdn-h3{font-size:var(--fs-5)} .cdn-ler .cdn-h4{font-size:var(--fs-4);color:var(--muted)}
+.cdn-ler ul,.cdn-ler ol{margin:0 0 var(--sp-8);padding-left:1.3em}
+.cdn-ler li{margin:var(--sp-2) 0 var(--sp-2) calc(var(--rec,0) * 1.2em)}
+.cdn-ler li.tk{list-style:none;margin-left:calc(-1.3em + var(--rec,0) * 1.2em);display:flex;align-items:flex-start;gap:var(--sp-8)}
+.cdn-ler li.tk input{flex:none;width:17px;height:17px;margin:4px 0 0;padding:0;cursor:pointer}
+.cdn-ler li.tk.ok span{color:var(--muted);text-decoration:line-through}
+.cdn-ler blockquote{margin:0 0 var(--sp-8);padding:var(--sp-2) 0 var(--sp-2) var(--sp-12);border-left:3px solid var(--line2);color:var(--muted)}
+.cdn-ler hr{border:0;border-top:1px solid var(--vd-fio,var(--line));margin:var(--sp-12) 0}
+.cdn-ler code{font-family:ui-monospace,Consolas,monospace;font-size:.9em;padding:1px 5px;border-radius:var(--r-xs);background:var(--vd-in-sunk,var(--sunk))}
+.cdn-ler pre{margin:0 0 var(--sp-8);padding:var(--sp-12);border-radius:var(--r-sm);background:var(--vd-in-sunk,var(--sunk));overflow:auto}
+.cdn-ler pre code{padding:0;background:none}
+.cdn-ler mark{background:color-mix(in srgb,var(--warn) 30%,transparent);color:inherit;border-radius:2px;padding:0 2px}
+.cdn-ler a{color:var(--accent)}
+.cdn-wl{padding:0;border:0;background:none;color:var(--accent);font-weight:600;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;cursor:pointer}
+.cdn-wl.novo{color:var(--muted);text-decoration-style:dashed;cursor:default}
+.cdn-tag{padding:1px 8px;border-radius:var(--r-full);background:var(--accent-soft);color:var(--accent);font-size:.88em;font-weight:600}
+.cdn-call{margin:0 0 var(--sp-8);padding:var(--sp-8) var(--sp-12);border-radius:var(--r-sm);background:var(--accent-soft)}
+.cdn-call b{display:block;color:var(--accent);font-size:var(--fs-3)}
+.cdn-call p{margin:var(--sp-4) 0 0}
+
+/* na ficha do paciente */
+.cdn-ficha h3{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--sp-4) var(--sp-12);margin:0 0 var(--sp-12)}
+.cdn-ficha h3 small{font-size:var(--fs-2);font-weight:400;color:var(--muted)}
+.cdn-ficha .cdn-ler,.cdn-ficha .cdn-esc{min-height:220px;max-height:60vh}
+.cdn-ficha .cdn-sess .cdn-ler{min-height:0;max-height:none}
+.cdn-sess{padding:var(--sp-12) 0;border-top:1px solid var(--vd-fio,var(--line))}
+.cdn-sess h4{margin:0 0 var(--sp-6);font-size:var(--fs-2);font-weight:600;color:var(--muted)}

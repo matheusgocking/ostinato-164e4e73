@@ -1,0 +1,208 @@
+/* Visão geral dos pacientes (js/mapa.js, 19/11/2026): o psicólogo no centro, os pacientes em volta.
+   Distância = perto ou longe do atendimento; fatia = dia da semana. O resumo fica ao lado. */
+.pmodo{flex:none} .pmodo button{min-height:var(--h-sm);padding:0 var(--sp-12);font-size:var(--fs-3)}
+.mp{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,320px);gap:var(--sp-32);align-items:start;margin-top:var(--sp-8)}
+.mp-mapa{position:relative;width:100%;max-width:680px;aspect-ratio:1;margin-inline:auto;container-type:inline-size}
+.mp-mapa svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.mp-g{fill:none;stroke:var(--line2);stroke-width:1;stroke-dasharray:2 7;vector-effect:non-scaling-stroke}
+.mp-g.g1{fill:color-mix(in srgb,var(--accent) 5%,transparent)}
+.mp-gt{font-size:17px;fill:var(--muted);text-anchor:end}
+.mp-div{stroke:var(--vd-fio,var(--line));stroke-width:1;vector-effect:non-scaling-stroke}
+.mp-fio{stroke:var(--line2);stroke-width:1.5;vector-effect:non-scaling-stroke;transition:opacity var(--dur-2)}
+.mp-fio.q{stroke-dasharray:6 5}
+.mp-fio.a2{stroke:var(--warn)} .mp-fio.a3{stroke:var(--bad);stroke-dasharray:2 6;opacity:.7}
+.mp-fio.sel{stroke:var(--accent);stroke-width:2.5;opacity:1}
+.mp-fio.off{opacity:.12}
+.mp-dia{position:absolute;transform:translate(-50%,-50%);font-size:clamp(11px,2cqw,13px);font-weight:600;color:var(--muted)}
+.mp-eu{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:grid;place-items:center;width:clamp(44px,10cqw,68px);aspect-ratio:1;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-size:clamp(11px,2.1cqw,14px);font-weight:700}
+
+/* cada paciente */
+.mp-n{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:3px;padding:0;border:0;background:none;color:var(--ink);cursor:pointer;transition:opacity var(--dur-2);z-index:1}
+.mp-n.off{opacity:.2}
+.mp-b{position:relative;display:grid;place-items:center;width:clamp(22px,calc(var(--d) * 1cqw),44px);aspect-ratio:1;border-radius:50%;background:var(--ink);color:var(--desk);border:2px solid var(--ink);transition:transform var(--dur-1)}
+.mp-b i{font-style:normal;font-size:clamp(9px,1.7cqw,12px);font-weight:700;letter-spacing:.02em}
+.mp-n:hover .mp-b{transform:scale(1.1)}
+.mp-n.novo .mp-b{background:var(--vd-forte,var(--raise));color:var(--accent);border-color:var(--accent)}
+.mp-n.a2 .mp-b{background:color-mix(in srgb,var(--warn) 16%,var(--vd-forte,var(--raise)));color:var(--ink);border-color:var(--warn)}
+.mp-n.a3 .mp-b{background:color-mix(in srgb,var(--bad) 12%,var(--vd-forte,var(--raise)));color:var(--ink);border-color:var(--bad);border-style:dashed}
+.mp-n[aria-pressed="true"] .mp-b{box-shadow:0 0 0 3px var(--desk),0 0 0 6px var(--accent)}
+.mp-n:focus-visible{outline:0} .mp-n:focus-visible .mp-b{outline:2px solid var(--accent);outline-offset:3px}
+/* casal: um segundo círculo por trás; criança ou adolescente: um círculo pequeno ao lado */
+.mp-n.casal .mp-b::before{content:"";position:absolute;inset:-2px;left:38%;right:-42%;border-radius:50%;border:2px solid currentColor;border-color:inherit;background:inherit;z-index:-1;opacity:.55}
+.mp-n.casal .mp-b{margin-right:18%}
+.mp-n.menor .mp-b::before{content:"";position:absolute;right:-28%;bottom:-8%;width:34%;aspect-ratio:1;border-radius:50%;border:2px solid var(--ink);background:var(--vd-forte,var(--raise))}
+.mp-b u{position:absolute;top:-3px;width:9px;height:9px;border-radius:50%;border:2px solid var(--desk);text-decoration:none}
+.mp-b u.reg{left:-3px;background:var(--accent)} .mp-b u.din{right:-3px;background:var(--warn)}
+.mp-b .chapeu{position:absolute;left:50%;top:-13px;transform:translateX(-50%);width:13px;height:13px}
+.mp-nm{max-width:9em;font-size:clamp(10px,1.9cqw,13px);font-weight:600;line-height:1.1;white-space:nowrap;text-shadow:0 0 4px var(--desk),0 0 4px var(--desk)}
+.mp-n[aria-pressed="true"] .mp-nm{color:var(--accent)}
+
+/* o lado */
+.mp-lado{min-width:0;padding-top:var(--sp-8)}
+.mp-lado h2{margin:0 0 var(--sp-8);font-size:var(--fs-7);line-height:1.2;text-transform:none;letter-spacing:0}
+.mp-lado h2.serif{font-size:var(--fs-8);margin-top:var(--sp-4)}
+.mp-como,.mp-dica{margin:0 0 var(--sp-16);font-size:var(--fs-3);color:var(--muted)}
+.mp-cs{display:flex;flex-direction:column;border-top:1px solid var(--vd-fio,var(--line));margin-bottom:var(--sp-16)}
+.mp-c{display:grid;grid-template-columns:44px minmax(0,1fr);align-items:center;min-height:48px;padding:0 var(--sp-4);border:0;border-bottom:1px solid var(--vd-fio,var(--line));background:none;color:var(--ink);text-align:left;font-size:var(--fs-4);cursor:pointer}
+.mp-c b{font-size:var(--fs-7);font-weight:600;font-variant-numeric:tabular-nums}
+.mp-c:hover:not(:disabled){background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.mp-c[aria-pressed="true"]{background:var(--accent-soft)}
+.mp-c:disabled{color:var(--muted);cursor:default}
+.mp-c.a2 b{color:var(--warn)} .mp-c.a3 b{color:var(--bad)}
+.mp-cs.fino .mp-c{min-height:40px;font-size:var(--fs-3)} .mp-cs.fino .mp-c b{font-size:var(--fs-5)}
+.mp-quem{display:flex;flex-direction:column;align-items:flex-start}
+.mp-quem button{min-height:36px;padding:0;border:0;background:none;color:var(--accent);font-weight:600;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;cursor:pointer}
+.mp-leg{list-style:none;margin:0 0 var(--sp-12);padding:0;font-size:var(--fs-2);color:var(--muted)}
+.mp-leg li{display:flex;align-items:center;gap:var(--sp-8);min-height:26px}
+.mp-leg i{flex:none;width:22px;height:14px;position:relative}
+.mp-leg .l-tam::before,.mp-leg .l-tam::after,.mp-leg .l-casal::before,.mp-leg .l-casal::after,.mp-leg .l-menor::before,.mp-leg .l-menor::after{content:"";position:absolute;top:50%;border-radius:50%;background:var(--ink);transform:translateY(-50%)}
+.mp-leg .l-tam::before{left:0;width:7px;height:7px} .mp-leg .l-tam::after{left:9px;width:13px;height:13px}
+.mp-leg .l-q{border-top:2px dashed var(--line2);height:0}
+.mp-leg .l-casal::before{left:1px;width:12px;height:12px} .mp-leg .l-casal::after{left:8px;width:12px;height:12px;opacity:.5}
+.mp-leg .l-menor::before{left:1px;width:12px;height:12px} .mp-leg .l-menor::after{left:15px;top:70%;width:6px;height:6px;background:none;border:1.5px solid var(--ink)}
+.mp-pq{margin:0 0 var(--sp-12);font-size:var(--fs-3);font-weight:600}
+.mp-pq.a2{color:var(--warn)} .mp-pq.a3{color:var(--bad)}
+.mp-lado .kv{margin-bottom:var(--sp-16)}
+.mp-bts{display:flex;flex-wrap:wrap;gap:var(--sp-8)}
+
+/* conserto de 23/11/2026: entre 900 e 1180 px, com o menu lateral, o mapa ficava com uns 350 px e os nomes se sobrepunham.
+   Agora ele vai para cima da legenda até 1180 px. */
+@media (max-width:1180px){
+  .mp{grid-template-columns:minmax(0,1fr);gap:var(--sp-16)}
+  .mp-mapa{max-width:560px;width:100%;justify-self:center}
+}
+@media (max-width:700px){ .pmodo{order:3;width:100%;margin-top:var(--sp-8)} .pmodo button{flex:1} }
+@media (prefers-reduced-motion: reduce){ .mp-n,.mp-b,.mp-fio{transition:none} }
+
+.mp-leg .l-reg::before,.mp-leg .l-din::before{content:"";position:absolute;left:4px;top:50%;width:9px;height:9px;border-radius:50%;transform:translateY(-50%);background:var(--accent)}
+.mp-leg .l-din::before{background:var(--warn)}
+.mp-leg .l-nv .chapeu{position:absolute;left:2px;top:0;width:14px;height:14px}
+
+/* dia cheio (mais de quatro pacientes na fatia): o nome só aparece ao passar o mouse, focar ou escolher */
+.mp-n.cheio .mp-nm{display:none}
+.mp-n.cheio:hover,.mp-n.cheio:focus-visible,.mp-n.cheio[aria-pressed="true"]{z-index:3}
+.mp-n.cheio:hover .mp-nm,.mp-n.cheio:focus-visible .mp-nm,.mp-n.cheio[aria-pressed="true"] .mp-nm{display:block;position:absolute;top:calc(100% + 2px);padding:2px 8px;border-radius:var(--r-full);background:var(--vd-forte,var(--raise));box-shadow:var(--vd-sombra,none);text-shadow:none}
+/* no celular o mapa fica pequeno: só as iniciais; o nome aparece em quem foi tocado, e as faixas ficam explicadas pelos números embaixo */
+@media (max-width:700px){
+  .mp-gt{display:none}
+  .mp-b{width:clamp(20px,calc(var(--d) * 1.1cqw),44px);border-width:1.5px}
+  .mp-n .mp-nm{display:none}
+  .mp-n[aria-pressed="true"]{z-index:3}
+  .mp-n[aria-pressed="true"] .mp-nm{display:block;position:absolute;top:calc(100% + 2px);padding:2px 8px;border-radius:var(--r-full);background:var(--vd-forte,var(--raise));box-shadow:var(--vd-sombra,none);text-shadow:none;font-size:12px}
+  .mp-b u{width:7px;height:7px;border-width:1.5px}
+  .mp-b .chapeu{width:12px;height:12px;top:-11px}
+}
+
+/* ---------- Início (23/11/2026): o mapa veio de Pacientes; as sessões do dia ficam ao lado ---------- */
+.mp-ini{grid-template-columns:minmax(0,1fr) minmax(300px,380px);margin-top:0}
+.mp-ini .mp-lado{padding-top:0}
+.ini-hoje{margin-bottom:var(--sp-32)}
+.ini-h{margin:0 0 var(--sp-8);font-size:var(--fs-7);line-height:1.2;text-transform:none;letter-spacing:0}
+.ini-h3{margin:var(--sp-24) 0 var(--sp-8);font-size:var(--fs-3);font-weight:600;color:var(--muted)}
+.ini-vis>h2{font-size:var(--fs-5);color:var(--muted);font-weight:600}
+/* a linha da sessão, mais estreita: hora e nome em cima, o que falta embaixo, botão à direita */
+.ini-hoje .h5-r{grid-template-columns:minmax(0,1fr) auto;column-gap:var(--sp-8);min-height:64px;transition:background var(--dur-1)}
+.ini-hoje .h5-m{grid-template-columns:48px minmax(0,1fr);row-gap:2px;padding:var(--sp-8) 0;font-size:var(--fs-4)}
+.ini-hoje .h5-m .st{grid-column:2;font-size:var(--fs-3)}
+.ini-hoje .h5-r:hover{background:color-mix(in srgb,var(--accent) 5%,transparent)}
+.mp-quem+.btn{margin-top:var(--sp-12)}
+
+/* o dia de hoje no mapa */
+.mp-hoje{fill:color-mix(in srgb,var(--accent) 7%,transparent);stroke:none}
+.mp-dia.hoje{color:var(--accent);font-weight:700}
+/* anel: tem sessão hoje; pulsa durante a sessão */
+.mp-n.hj .mp-b::after,.mp-n.agora .mp-b::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--accent);pointer-events:none}
+.mp-n.agora .mp-b::after{animation:mpPulso 2.4s ease-out infinite}
+@keyframes mpPulso{0%{transform:scale(.92);opacity:.9}100%{transform:scale(1.7);opacity:0}}
+.mp-leg .l-hj::before{content:"";position:absolute;left:3px;top:50%;width:12px;height:12px;border-radius:50%;border:2px solid var(--accent);transform:translateY(-50%)}
+
+/* passar o mouse numa sessão de hoje acende o paciente no mapa */
+.mp.tem-hl .mp-n:not(.hl){opacity:.3}
+.mp.tem-hl .mp-fio:not(.hl){opacity:.15}
+.mp-n.hl{z-index:4}
+.mp-n.hl .mp-b{transform:scale(1.2);box-shadow:0 0 0 3px var(--desk),0 0 0 6px var(--accent)}
+.mp-n.hl .mp-nm{display:block;color:var(--accent)}
+.mp-fio.hl{stroke:var(--accent);stroke-width:2.5;opacity:1}
+
+/* entrada: os pacientes saem do centro, um a um, e os fios aparecem depois */
+.mp.entra .mp-n{animation:mpSai .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 30ms + 80ms)}
+@keyframes mpSai{from{left:50%;top:50%;opacity:0}}
+.mp.entra .mp-fio,.mp.entra .mp-g,.mp.entra .mp-hoje{animation:mpAcende .9s ease-out both;animation-delay:.25s}
+.mp.entra .mp-eu{animation:mpEu .5s cubic-bezier(.2,.8,.2,1) both}
+@keyframes mpAcende{from{opacity:0}}
+@keyframes mpEu{from{transform:translate(-50%,-50%) scale(.4);opacity:0}}
+
+/* ---------- Resumo do Início (23/11/2026): pacientes, agenda e financeiro numa faixa de vidro só ----------
+   Três colunas separadas por um fio, não três cartões: é uma leitura só, da esquerda para a direita.
+   O número fica na Newsreader (o único lugar de letra de título no Início); o resto é frase. */
+.ini-res{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:var(--sp-8);border-radius:var(--r-16,16px);background:var(--vd-painel,var(--raise));border:1px solid var(--vd-painel-b,var(--line));box-shadow:var(--vd-sombra,none)}
+.ir{display:grid;grid-template-rows:auto auto 46px auto;align-content:start;gap:var(--sp-8);min-width:0;padding:var(--sp-16) var(--sp-24) var(--sp-20,20px);border:0;background:none;color:var(--ink);text-align:left;font:inherit;cursor:pointer;border-radius:0;transition:background var(--dur-1)}
+.ir+.ir{border-left:1px solid var(--vd-fio,var(--line))}
+.ir:first-child{border-radius:16px 0 0 16px} .ir:last-child{border-radius:0 16px 16px 0}
+.ir:hover{background:color-mix(in srgb,var(--accent) 6%,transparent)}
+.ir:focus-visible{outline:2px solid var(--accent);outline-offset:-4px}
+.ir-t{font-size:var(--fs-3);font-weight:600;color:var(--muted)}
+.ir-t::after{content:" ›";color:var(--accent);opacity:0;transition:opacity var(--dur-1)}
+.ir:hover .ir-t::after,.ir:focus-visible .ir-t::after{opacity:1}
+.ir-n{font-size:var(--fs-4);color:var(--muted);line-height:1.25}
+.ir-n b{font:400 var(--fs-9)/1 var(--display);letter-spacing:-.02em;color:var(--ink);margin-right:2px;font-variant-numeric:tabular-nums}
+.ir-f{font-size:var(--fs-3);color:var(--muted);line-height:1.45}
+.ir .nw{white-space:nowrap}
+/* barra das proporções (pacientes por distância; dinheiro do mês) */
+.ir-bar{display:flex;gap:3px;align-self:center;height:8px;border-radius:99px;overflow:hidden}
+.ir-bar i{display:block;min-width:4px;border-radius:99px}
+.ir-bar .b-ok,.ir-bar .b-rec{background:var(--accent)}
+.ir-bar .b-w{background:var(--warn)} .ir-bar .b-x{background:var(--bad)}
+.ir-bar .b-ar{background:var(--bar2)}
+.ir-bar .b-prev{background:repeating-linear-gradient(135deg,var(--line2) 0 2px,transparent 2px 5px);box-shadow:inset 0 0 0 1px var(--line2)}
+/* a semana em pontos: uma bolinha por sessão, de baixo para cima */
+.ir-sem{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;align-items:end;height:46px}
+.ir-dia{display:flex;flex-direction:column;align-items:center;gap:5px}
+.ir-dia i{font-style:normal;font-size:11px;font-weight:600;color:var(--muted);line-height:1}
+.ir-dia.hoje i{color:var(--accent)}
+.ir-dia.hoje{position:relative}
+.ir-dia.hoje::before{content:"";position:absolute;inset:-4px 2px -3px;border-radius:8px;background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.ir-pts{position:relative;display:flex;flex-direction:column-reverse;flex-wrap:wrap;align-content:center;gap:2px 3px;height:30px}
+.ir-pts b{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.ir-pts b.a{background:none;box-shadow:inset 0 0 0 1.5px var(--accent)}
+.ir-pts b.w{background:var(--warn)}
+
+/* ---------- o "i" do mapa (23/11/2026): a legenda abre num balão, por cima do canto do mapa ---------- */
+.mp-info{position:absolute;left:0;top:0;z-index:6}
+.mp-i{display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;background:none;cursor:pointer;color:var(--muted);font:italic 600 15px/1 var(--display)}
+.mp-i::before{content:"";position:absolute;width:26px;height:26px;border-radius:50%;border:1.5px solid currentColor;opacity:.7}
+.mp-i:hover,.mp-i[aria-expanded="true"]{color:var(--accent)}
+.mp-i:focus-visible{outline:2px solid var(--accent);outline-offset:-4px;border-radius:50%}
+.mp-pop{position:absolute;left:8px;top:44px;width:min(320px,calc(100cqw - 16px));padding:var(--sp-16);border-radius:12px;background:color-mix(in srgb,var(--accent) 7%,var(--vd-fundo,var(--desk)));border:1px solid var(--line2);box-shadow:var(--vd-sombra,0 8px 24px rgba(0,0,0,.2));-webkit-backdrop-filter:var(--vd-blur);backdrop-filter:var(--vd-blur);animation:mpPop .16s ease-out}
+.mp-pop .mp-como{margin:0 0 var(--sp-12);color:var(--ink)}
+.mp-pop .mp-leg{margin-bottom:var(--sp-12)}
+.mp-pop .mp-dica{margin:0}
+@keyframes mpPop{from{opacity:0;transform:translateY(-4px)}}
+
+/* ---------- arrastar (23/11/2026): segue o ponteiro, e a mola traz de volta (js/mapa.js) ---------- */
+.mp-n{touch-action:none}
+.mp-n.arrasta{z-index:5;cursor:grabbing}
+.mp-n.arrasta .mp-b{transform:scale(1.15);box-shadow:0 0 0 3px var(--desk),0 0 0 6px var(--accent),0 10px 24px -8px rgba(0,0,0,.45)}
+.mp-n.arrasta .mp-nm{display:block}
+.mp-mapa.arrastando{cursor:grabbing;user-select:none}
+.mp-mapa.arrastando .mp-n:not(.arrasta){pointer-events:none}
+
+/* tela estreita: primeiro as sessões de hoje, depois o resumo, o mapa e os números */
+@media (max-width:1180px){
+  .mp-ini{display:flex;flex-direction:column;gap:var(--sp-24)}
+  .mp-ini .mp-lado{display:contents}
+  .mp-ini .ini-hoje{order:1;margin-bottom:0}
+  .mp-ini .ini-res{order:2;margin-bottom:0}
+  .mp-ini .mp-mapa{order:3}
+  .mp-ini .mp-lado>*:not(.ini-hoje){order:4}
+}
+@media (max-width:720px){
+  .ini-res{grid-template-columns:1fr}
+  .ir{grid-template-rows:none;padding:var(--sp-16)}
+  .ir+.ir{border-left:0;border-top:1px solid var(--vd-fio,var(--line))}
+  .ir:first-child{border-radius:16px 16px 0 0} .ir:last-child{border-radius:0 0 16px 16px}
+  .ir-n b{font-size:var(--fs-8)}
+}
+@media (prefers-reduced-motion: reduce){
+  .mp.entra .mp-n,.mp.entra .mp-fio,.mp.entra .mp-g,.mp.entra .mp-hoje,.mp.entra .mp-eu,.mp-n.agora .mp-b::after,.mp-pop{animation:none}
+}

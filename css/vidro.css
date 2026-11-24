@@ -1,0 +1,90 @@
+/* Vidro (pedido de Matheus, 14/11/2026, no jeito da Sintropia 2.0): manchas de cor desfocadas no fundo,
+   o app flutua com margem e cantos arredondados. Fica por cima de base.css e usa os mesmos tokens.
+   VIDRO EM TUDO (Matheus, 16/11/2026, depois de comparar na agenda do guia de identidade): o conteúdo também é
+   translúcido e deixa as manchas aparecerem. Sem backdrop-filter na casca, no menu, no conteúdo, na grade e nas listas:
+   o fundo já é liso, o desfoque não muda o visual e travava a rolagem (pior quadro de 61 ms, medido em 14/11/2026).
+   Desfoque só no que flutua por cima de texto (barra do site, barra de baixo, menus, janelas, painel lateral).
+   A folha do prontuário e os documentos continuam brancos (são papel). A profundidade vem de um filete de luz na
+   borda de cima, não de sombra larga. Quem pede menos transparência ao sistema recebe tudo opaco.
+   Cores das manchas: Índigo e lilás (16/11/2026). A versão "vidro só no menu" está em "Backup antes do Indigo 16-11". */
+:root{
+  --vd-fundo:#ECEAF7;
+  --vd-m1:rgba(75,67,176,.62); --vd-m2:rgba(196,190,247,.9); --vd-m3:rgba(123,114,224,.55); --vd-m4:rgba(186,140,230,.6);
+  --vd-casca:rgba(255,255,255,.34); --vd-casca-b:rgba(255,255,255,.72);
+  --vd-painel:rgba(255,255,255,.55); --vd-painel-b:rgba(255,255,255,.85);
+  --vd-forte:rgba(255,255,255,.84);
+  --vd-solido:rgba(250,250,254,.5); --vd-solido-b:rgba(255,255,255,.8);
+  --vd-in-raise:rgba(255,255,255,.62); --vd-in-sunk:rgba(28,26,71,.06);
+  --vd-fio:rgba(28,26,71,.08);
+  --vd-luz:inset 0 1px 0 rgba(255,255,255,.88);
+  --vd-sombra:var(--vd-luz),0 1px 2px rgba(28,26,71,.06),0 12px 28px -18px rgba(75,67,176,.4);
+  --vd-blur:blur(20px) saturate(150%);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --vd-fundo:#0F0E17;
+  --vd-m1:rgba(75,67,176,.5); --vd-m2:rgba(110,80,190,.45); --vd-m3:rgba(90,82,168,.4); --vd-m4:rgba(120,80,170,.4);
+  --vd-casca:rgba(20,18,34,.46); --vd-casca-b:rgba(255,255,255,.08);
+  --vd-painel:rgba(28,26,44,.62); --vd-painel-b:rgba(255,255,255,.10);
+  --vd-forte:rgba(30,28,46,.92);
+  --vd-solido:rgba(18,17,28,.55); --vd-solido-b:rgba(255,255,255,.08);
+  --vd-in-raise:rgba(40,37,62,.55); --vd-in-sunk:rgba(0,0,0,.2);
+  --vd-fio:rgba(255,255,255,.08);
+  --vd-luz:inset 0 1px 0 rgba(255,255,255,.07);
+  --vd-sombra:var(--vd-luz),0 1px 2px rgba(0,0,0,.3),0 14px 30px -16px rgba(0,0,0,.7) } }
+:root[data-theme="dark"]{
+  --vd-fundo:#0F0E17;
+  --vd-m1:rgba(75,67,176,.5); --vd-m2:rgba(110,80,190,.45); --vd-m3:rgba(90,82,168,.4); --vd-m4:rgba(120,80,170,.4);
+  --vd-casca:rgba(20,18,34,.46); --vd-casca-b:rgba(255,255,255,.08);
+  --vd-painel:rgba(28,26,44,.62); --vd-painel-b:rgba(255,255,255,.10);
+  --vd-forte:rgba(30,28,46,.92);
+  --vd-solido:rgba(18,17,28,.55); --vd-solido-b:rgba(255,255,255,.08);
+  --vd-in-raise:rgba(40,37,62,.55); --vd-in-sunk:rgba(0,0,0,.2);
+  --vd-fio:rgba(255,255,255,.08);
+  --vd-luz:inset 0 1px 0 rgba(255,255,255,.07);
+  --vd-sombra:var(--vd-luz),0 1px 2px rgba(0,0,0,.3),0 14px 30px -16px rgba(0,0,0,.7) }
+
+/* fundo */
+body{background:var(--vd-fundo)}
+body::after{content:"";position:fixed;inset:-10%;z-index:-1;pointer-events:none;background:
+  radial-gradient(40% 48% at 10% 15%,var(--vd-m1),transparent 70%),
+  radial-gradient(38% 44% at 90% 10%,var(--vd-m2),transparent 70%),
+  radial-gradient(48% 52% at 80% 90%,var(--vd-m3),transparent 70%),
+  radial-gradient(42% 48% at 18% 95%,var(--vd-m4),transparent 70%)}
+body::before{background:transparent}
+
+/* site: barra de cima em vidro (é navegação) */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--vd-casca);border-bottom:1px solid var(--vd-casca-b);
+  backdrop-filter:var(--vd-blur);-webkit-backdrop-filter:var(--vd-blur)}
+
+/* app: menu lateral e conteúdo, os dois em vidro sem desfoque. Dentro do conteúdo, as superfícies (--raise)
+   e as faixas (--sunk) também ficam translúcidas; --desk continua sólido para as barras que grudam no rolar. */
+.shell{margin:var(--sp-16);min-height:calc(100vh - 2 * var(--sp-16));gap:var(--sp-12);background:none}
+.rail{top:var(--sp-16);height:calc(100vh - 2 * var(--sp-16));border-radius:var(--r-xl);background:var(--vd-casca);
+  border:1px solid var(--vd-casca-b);box-shadow:var(--vd-luz)}
+.main{--raise:var(--vd-in-raise);--sunk:var(--vd-in-sunk);
+  max-width:none;background:var(--vd-solido);border:1px solid var(--vd-solido-b);border-radius:var(--r-xl);
+  box-shadow:var(--vd-sombra);padding-right:max(var(--sp-40),calc(100% - 1220px))}
+.main:has(#cd){max-width:none;padding-right:max(var(--sp-40),calc(100% - 1520px))}
+
+/* o que flutua por cima do conteúdo: menus, janelas, painel lateral. Material grosso (84 a 92% opaco) porque tem texto. */
+.sheet,#pop,.cd-pop,.pop,.mais-m,.ppop,.fo-panel{background:var(--vd-forte);border-color:var(--vd-painel-b);box-shadow:var(--vd-sombra);
+  backdrop-filter:var(--vd-blur);-webkit-backdrop-filter:var(--vd-blur)}
+.sheet{border-radius:var(--r-lg)}
+#pop,.cd-pop,.pop,.mais-m,.ppop{border-radius:var(--r-md)}
+
+/* celular e tablet: o menu vira barra fixa embaixo, em vidro com desfoque (ela passa por cima do conteúdo). */
+@media (max-width:900px){
+  .shell{margin:var(--sp-8);gap:0;min-height:calc(100vh - 2 * var(--sp-8))}
+  .main{border-radius:var(--r-lg);padding-right:var(--gr)}
+  .main:has(#cd){padding-right:var(--gr)}
+  .rail{top:auto;height:auto;border-radius:0;border:0;background:var(--vd-forte);border-top:1px solid var(--vd-painel-b);box-shadow:none;
+    backdrop-filter:var(--vd-blur);-webkit-backdrop-filter:var(--vd-blur)}
+}
+
+/* menos transparência pedida pelo sistema: tudo opaco, sem desfoque */
+@media (prefers-reduced-transparency: reduce){
+  :root{--vd-casca:var(--raise); --vd-painel:var(--raise); --vd-forte:var(--raise); --vd-solido:var(--desk)}
+  .main{--raise:#FBFCFD; --sunk:#E6E9EF}
+  :root[data-theme="dark"] .main{--raise:#1A1E28; --sunk:#0B0D12}
+  .top,.rail,.sheet,#pop,.cd-pop,.pop,.mais-m,.ppop,.fo-panel{backdrop-filter:none;-webkit-backdrop-filter:none}
+}

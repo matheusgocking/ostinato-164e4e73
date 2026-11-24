@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ostinato: agenda, prontuário e financeiro para psicólogos</title>
+<meta name="description" content="O Ostinato mostra em que ponto cada sessão está, do horário marcado ao pagamento. Agenda, prontuário e financeiro para quem atende sozinho. Protótipo com pacientes inventados.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#ECEAF7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F0E17" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Ostinato: cada sessão deixa um rastro">
+<meta property="og:description" content="O Ostinato mostra em que ponto cada sessão está, do horário marcado ao pagamento. Agenda, prontuário e financeiro para quem atende sozinho. Protótipo com pacientes inventados.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+<link rel="stylesheet" href="css/tokens.css?v=61">
+<link rel="stylesheet" href="css/base.css?v=61">
+<link rel="stylesheet" href="css/vidro.css?v=61">
+<link rel="stylesheet" href="css/pacientes.css?v=61">
+<link rel="stylesheet" href="css/financeiro.css?v=61">
+<link rel="stylesheet" href="css/hoje.css?v=61">
+<link rel="stylesheet" href="css/busca.css?v=61">
+<link rel="stylesheet" href="css/painel.css?v=61">
+<link rel="stylesheet" href="css/sessao.css?v=61">
+<link rel="stylesheet" href="css/caderno.css?v=61">
+<link rel="stylesheet" href="css/mapa.css?v=61">
+<link rel="stylesheet" href="css/modelos.css?v=61">
+<script>/* o tema escolhido (claro ou escuro) entra antes de a tela ser desenhada, para a página não piscar na cor errada; a chave é a mesma de KEY+"-tema" em js/app.js */try{var tm0=localStorage.getItem("rastro-demo-v6-tema");if(tm0)document.documentElement.setAttribute("data-theme",tm0)}catch(e){}</script>
+<script>/* ?skin=liso no endereco desliga o vidro e as manchas do fundo, para comparar */if(/[?&]skin=liso/.test(location.search)){var vd=document.querySelector('link[href*="vidro.css"]');if(vd)vd.disabled=true;document.documentElement.setAttribute("data-skin","liso")}</script>
+</head>
+<body>
+<a class="pula" href="#site">Pular para o conteúdo</a>
+
+<header class="top" id="top">
+  <div class="wrap">
+   <div class="bar">
+    <button class="logo" data-act="nav" data-to="inicio" aria-label="Ostinato, página inicial">
+      <svg viewBox="0 0 100 100" aria-hidden="true" data-sym></svg>
+      Ostinato
+    </button>
+    <nav class="nav" aria-label="Páginas do site">
+      <button data-act="nav" data-to="agenda">Agenda</button>
+      <button data-act="nav" data-to="prontuario">Prontuário</button>
+      <button data-act="nav" data-to="financeiro">Financeiro</button>
+      <button data-act="nav" data-to="precos">Preços</button>
+    </nav>
+    <span class="sp"></span>
+    <button class="icon" data-act="theme" aria-label="Trocar entre claro e escuro" title="Claro ou escuro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor"/></svg></button>
+    <button class="btn pri sm" data-act="nav" data-to="app-hoje"><span class="lg">Entrar na demonstração</span><span class="sh">Entrar</span></button>
+    <button class="icon" id="menubtn" data-act="menu" aria-label="Abrir o menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+   </div>
+   <div id="menu" hidden>
+    <button data-act="nav" data-to="inicio">Início</button>
+    <button data-act="nav" data-to="agenda">Agenda</button>
+    <button data-act="nav" data-to="prontuario">Prontuário</button>
+    <button data-act="nav" data-to="financeiro">Financeiro</button>
+    <button data-act="nav" data-to="precos">Preços</button>
+   </div>
+  </div>
+</header>
+
+<!-- ============ SITE ============ -->
+<main id="site">
+
+<section class="page" data-page="inicio">
+  <div class="abre"><div class="wrap">
+    <h1>Cada sessão deixa um rastro.</h1>
+    <p class="lede">Do horário marcado ao pagamento, o Ostinato mostra em que ponto cada sessão está e o que ainda falta. Agenda, prontuário e financeiro para quem atende sozinho.</p>
+    <div class="btnrow"><button class="btn pri" data-act="nav" data-to="app-hoje">Entrar na demonstração</button><button class="btn" data-act="nav" data-to="agenda">Ver a agenda</button><small>Protótipo com pacientes inventados. Não pede cadastro.</small></div>
+    <div class="passos" id="wk-days" role="group" aria-label="O dia no consultório de exemplo. Toque num ponto para ver a sessão."></div>
+    <div class="passo-demo" id="wk-body"></div>
+  </div></div>
+
+  <div class="tela"><div class="wrap">
+    <p class="cap"><span>A agenda da demonstração, nesta semana. Ponto cheio aconteceu, ponto vermelho ficou para trás.</span><button class="link" data-act="nav" data-to="app-agenda">Abrir a agenda</button></p>
+    <div class="in" id="site-ag" inert aria-hidden="true"></div>
+  </div></div>
+
+  <section class="band aviso"><div class="wrap">
+    <div>
+      <h2>Ninguém some da agenda sem você perceber.</h2>
+      <p class="intro">O Ostinato cruza a última sessão, o contrato e as próximas semanas da agenda. Quem ficou sem horário aparece na tela Hoje, com o convite pronto. Mandar ou não é com você.</p>
+    </div>
+    <div class="fora">
+      <h3 class="sec">Como aparece na tela Hoje</h3>
+      <p class="grp">Convidar <span>1 paciente sem próxima sessão</span></p>
+      <div class="it"><span>Sofia Lacerda<small>Última sessão há 12 dias. Pelo contrato, a cada 15 dias, sexta às 11h.</small></span><button class="act" data-act="copy-dg">Copiar convite</button></div>
+    </div>
+  </div></section>
+
+  <!-- 19/11/2026: ponto forte do marketing pedido por Matheus: descomplicar o complicado -->
+  <section class="band"><div class="wrap">
+    <h2>O complicado fica simples.</h2>
+    <p class="intro">Você não precisa aprender um sistema. O Ostinato fala a língua do consultório e deixa na tela só o que você usa agora. O resto está a um toque.</p>
+    <div class="points">
+      <div><b>Prontuário sem página em branco.</b><span>O texto padrão já vem escrito. Você preenche o que está em vermelho e aprova.</span></div>
+      <div><b>Dinheiro sem planilha.</b><span>Cada sessão sabe se foi paga. O que atrasou aparece sozinho.</span></div>
+      <div><b>Todos os pacientes numa olhada.</b><span>Você no centro, os pacientes em volta. Quem começa a sumir vai para a borda.</span></div>
+      <div><b>A sessão numa tela só.</b><span>Chamada, anotações, lousa, prontuário e plano de ação, sem trocar de janela.</span></div>
+    </div>
+  </div></section>
+
+  <section class="band"><div class="wrap">
+    <h2>O que os outros sistemas ainda deixam com você.</h2>
+    <p class="intro">Levantado nas páginas de 15 plataformas brasileiras. Nenhuma anuncia estas três coisas.</p>
+    <div class="points tres">
+      <div><b>Quem ficou sem horário.</b><span>A agenda lista o paciente ativo sem próxima sessão e deixa a mensagem pronta.</span></div>
+      <div><b>Declaração por período.</b><span>Um mês, um trimestre ou o ano, com datas e valores pagos e sem sintoma.</span></div>
+      <div><b>Casal e criança ligados.</b><span>Responsáveis e parceiros no mesmo prontuário, com um contrato só.</span></div>
+    </div>
+  </div></section>
+</section>
+
+<section class="page" data-page="agenda" hidden>
+  <div class="hero"><div class="wrap">
+    <div>
+      <h1>A semana inteira, e quem ficou sem horário.</h1>
+      <p class="lede">Toque numa sessão da semana de exemplo para mudar o estado. O financeiro embaixo dela acompanha na hora, porque é a mesma sessão.</p>
+      <div class="btnrow"><button class="btn pri" data-act="nav" data-to="app-agenda">Abrir a agenda completa</button></div>
+    </div>
+    <div class="stage">
+      <div class="stage-h"><h3>Semana de exemplo</h3><span class="muted" style="font-size:13px">Toque para mudar o estado.</span></div>
+      <div class="stage-b" style="display:grid;gap:14px">
+        <div id="dg-grid" style="min-width:0"></div>
+        <div id="dg-side" style="min-width:0"></div>
+      </div>
+      <div class="stage-f" id="dg-foot"></div>
+    </div>
+  </div></div>
+  <section class="band"><div class="wrap">
+    <h2>Feita para a rotina de quem atende online.</h2>
+    <div class="points">
+      <div><b>Semana e mês.</b><span>Toque num horário vazio para marcar. No celular, a semana rola de lado.</span></div>
+      <div><b>Toda semana ou a cada 15 dias.</b><span>A sessão se repete pelo contrato do paciente, com valor e modalidade.</span></div>
+      <div><b>Lembrete pronto.</b><span>Nome, dia e hora já no texto, para mandar pelo WhatsApp.</span></div>
+      <div><b>Falta cobrada ou não.</b><span>Você decide na hora, e o financeiro conta só a cobrada.</span></div>
+    </div>
+  </div></section>
+</section>
+
+<section class="page" data-page="prontuario" hidden>
+  <div class="hero"><div class="wrap">
+    <div>
+      <h1>A evolução nasce da sessão, não de uma pasta.</h1>
+      <p class="lede">Escolha um modelo e escreva. O texto que vai para o prontuário se monta ao lado, com a data da sessão.</p>
+      <div class="btnrow"><button class="btn pri" data-act="nav" data-to="app-prontuario">Abrir um prontuário</button><button class="btn" data-act="nav" data-to="formas">Ver as três formas em estudo</button></div>
+    </div>
+    <div class="stage">
+      <div class="stage-h"><h3>Evolução de 9 de novembro</h3><div class="seg" id="pr-models"></div></div>
+      <div class="stage-b side2">
+        <div class="fields" id="pr-fields"></div>
+        <div><p class="muted" style="font-size:13px;margin-bottom:6px">Como fica no prontuário</p><div class="quote" id="pr-out"></div></div>
+      </div>
+    </div>
+  </div></div>
+  <section class="band"><div class="wrap">
+    <h2>Nada fica para depois sem você saber.</h2>
+    <div class="points">
+      <div><b>Pendências à vista.</b><span>Sessão realizada sem evolução aparece na tela Hoje até ser escrita.</span></div>
+      <div><b>Histórico por data.</b><span>Sessões e faltas em ordem, com o que foi combinado em cada uma.</span></div>
+      <div><b>Casal e criança.</b><span>Parceiros e responsáveis ligados ao mesmo registro.</span></div>
+      <div><b>Documentos do paciente.</b><span>Contrato do atendimento online e termo de consentimento gerados do cadastro.</span></div>
+    </div>
+  </div></section>
+</section>
+
+<section class="page" data-page="financeiro" hidden>
+  <div class="hero"><div class="wrap">
+    <div>
+      <h1>Quanto entrou, quanto falta e a declaração do reembolso.</h1>
+      <p class="lede">Escolha o paciente e o período. A declaração sai com as datas e os valores pagos, sem sintoma, pronta para o plano de saúde.</p>
+      <div class="btnrow"><button class="btn pri" data-act="nav" data-to="app-financeiro">Abrir o financeiro</button></div>
+    </div>
+    <div class="stage">
+      <div class="stage-h"><h3>Declaração para reembolso</h3></div>
+      <div class="stage-b fields">
+        <div class="grid2">
+          <div class="field"><label for="fd-p">Paciente</label><select id="fd-p"></select></div>
+          <div class="field"><label for="fd-q">Período</label><select id="fd-q"><option value="mes">Este mês</option><option value="ant">Mês passado</option><option value="tri" selected>Últimos 3 meses</option><option value="ano">Este ano</option></select></div>
+        </div>
+        <div class="quote" id="fd-out"></div>
+      </div>
+      <div class="stage-f"><button class="btn sm" data-act="copy-fd">Copiar declaração</button><span id="fd-sum"></span></div>
+    </div>
+  </div></div>
+  <section class="band"><div class="wrap">
+    <h2>O dinheiro sai da agenda, sem planilha ao lado.</h2>
+    <div class="points">
+      <div><b>Três números por mês.</b><span>Recebido, a receber e em atraso, contados pela data da sessão.</span></div>
+      <div><b>Previsão.</b><span>O que ainda está marcado no mês mostra até onde ele pode chegar.</span></div>
+      <div><b>Recibo por sessão.</b><span>Um toque depois do Pix e o texto do recibo está pronto.</span></div>
+      <div><b>Relatório do ano.</b><span>Sessões e total pago por paciente, para o imposto de renda de cada um.</span></div>
+    </div>
+  </div></section>
+</section>
+
+<section class="page" data-page="formas" hidden>
+  <div class="hero" style="padding-bottom:20px"><div class="wrap" style="grid-template-columns:minmax(0,1fr)">
+    <div>
+      <h1>O prontuário em estudo: um bloco no jeito do seu Word e três formas comparadas.</h1>
+      <p class="lede">A mesma sessão de Helena Prado, de 9 de novembro, em todos os exemplos. Primeiro o bloco que você vai usar; depois as três formas que levaram a ele e a recomendação.</p>
+    </div>
+  </div></div>
+
+  <section class="pb"><div class="wrap">
+    <div class="head">
+      <h2>A sessão já abre escrita. Você preenche o que está em vermelho.</h2>
+      <p>Como no seu Word: cada atendimento é um bloco com o texto padrão e os campos em vermelho. Você marca o que aconteceu, preenche as lacunas (a tecla Tab pula para a próxima), e o objetivo e a técnica vêm da formulação com um toque. Ao aprovar, a próxima sessão abre sozinha, com a tarefa combinada no alto. O que mais você costuma escrever fica no botão Frases.</p>
+    </div>
+    <div class="stage">
+      <div class="stage-h"><h3 id="pb-h">Helena Prado, sessão 09</h3><div class="seg" id="pb-v"></div></div>
+      <div class="stage-b pb-g">
+        <div>
+          <div class="pb-bar">
+            <div class="chips" id="pb-sit" aria-label="O que aconteceu"></div>
+            <span class="sp"></span>
+            <button class="btn sm" id="pb-open" data-act="pb-open" aria-expanded="false" aria-controls="pb-pop"></button>
+            <div class="pop" id="pb-pop" hidden></div>
+          </div>
+          <div id="pb-sub" class="pb-sub" hidden></div>
+          <div class="carry" id="pb-carry" hidden></div>
+          <p class="lab" id="pb-sec"></p>
+          <div id="pb-ed" class="eds"></div>
+          <div id="pb-sug" class="sug" hidden></div>
+          <div id="pb-add" class="sug" hidden></div>
+          <div class="pb-act"><button class="btn pri" data-act="pb-ok" id="pb-ok"></button><span id="pb-left"></span></div>
+        </div>
+        <div>
+          <div class="pb-pv" lang="pt-BR"><div id="pb-out"></div></div>
+          <div class="pb-opt" id="pb-opt"></div>
+        </div>
+      </div>
+      <div class="stage-f"><span>Reagendamento não gasta sessão: o número fica, a data muda e a evolução segue em aberto. Ao aprovar, a evolução vira um parágrafo só.</span><button class="link" data-act="pb-reset">Recomeçar o exemplo</button></div>
+    </div>
+  </div></section>
+
+  <section class="fm"><div class="wrap">
+    <div>
+      <span class="num-b">1</span>
+      <h2>Texto com modelo</h2>
+      <p class="idea">O padrão do mercado: você escolhe um modelo (livre, TCC, casal) e escreve em campos soltos. É o que a página Prontuário mostra hoje.</p>
+      <dl>
+        <div><dt>A favor</dt><dd>Cabe qualquer abordagem e qualquer jeito de escrever. O mais barato de construir.</dd></div>
+        <div><dt>Contra</dt><dd>Você digita tudo, toda semana, e o texto sai em tópicos, não com a cara do seu prontuário. A atividade da sessão anterior fica escondida no texto, e objetivo e encerramento não têm lugar próprio.</dd></div>
+      </dl>
+      <p class="ref">Referência: os formatos de nota SOAP, DAP e BIRP (BIRP: comportamento, intervenção, resposta e plano). As fontes não apontam um melhor que os outros.</p>
+    </div>
+    <div class="stage">
+      <div class="stage-h"><h3>Evolução de 9 de novembro</h3><div class="seg"><button aria-pressed="false" tabindex="-1">Livre</button><button aria-pressed="true" tabindex="-1">TCC</button><button aria-pressed="false" tabindex="-1">Casal</button></div></div>
+      <div class="stage-b fields">
+        <div class="field"><label for="fm1-a">Demanda</label><textarea id="fm1-a">Ansiedade antes de reuniões.</textarea></div>
+        <div class="field"><label for="fm1-b">Intervenção</label><textarea id="fm1-b">Revisamos o teste da previsão feito na reunião de quinta e ensaiamos a fala da próxima.</textarea></div>
+        <div class="field"><label for="fm1-c">Resposta</label><textarea id="fm1-c">Falou na reunião. A crítica que temia não veio.</textarea></div>
+        <div class="field"><label for="fm1-d">Plano</label><textarea id="fm1-d">Falar primeiro na reunião de segunda.</textarea></div>
+      </div>
+      <div class="stage-f">A sessão de 16 de novembro abre com estes mesmos campos, vazios.</div>
+    </div>
+  </div></section>
+
+  <section class="fm"><div class="wrap">
+    <div>
+      <span class="num-b">2</span>
+      <h2>Frases prontas por situação</h2>
+      <p class="idea">É como você já registra: escolhe o que aconteceu, preenche as lacunas e o texto sai no seu estilo (voz passiva, "com o objetivo de", "ficou acordado"), no gênero do cadastro. Cada atendimento é um bloco, com o registro entre sessões e o registro da evolução. O Controle Único já faz assim.</p>
+      <dl>
+        <div><dt>A favor</dt><dd>O texto tem cara de prontuário de verdade e sai igual em todo paciente. Falta e reagendamento viram um toque. O motor já existe.</dd></div>
+        <div><dt>Contra</dt><dd>As frases são as suas: para outro psicólogo, precisam ser editáveis. O objetivo terapêutico aparece só na frase da primeira sessão e depois se perde, e tema, objetivo e técnica são redigitados toda semana.</dd></div>
+      </dl>
+      <p class="ref">Base: os seus modelos de preenchimento (nota Prontuário Psicológico), o levantamento dos 59 prontuários (Padrões de Escrita do Prontuário) e o editor de evolução da Clínica no Controle Único.</p>
+    </div>
+    <div class="stage">
+      <div class="stage-h"><h3>Sessão 9, 9 de novembro</h3></div>
+      <div class="stage-b">
+        <div class="fm-g"><p class="lbl">O que aconteceu</p><div class="chips" id="fs-sit"></div></div>
+        <div id="fs-f"></div>
+        <p class="lab">Como fica no prontuário</p>
+        <div class="quote" id="fs-out"></div>
+      </div>
+      <div class="stage-f">O gênero vem do cadastro. Você confere e aprova antes de ir para o prontuário.</div>
+    </div>
+  </div></section>
+
+  <section class="fm"><div class="wrap">
+    <div>
+      <span class="num-b">3</span>
+      <h2>Frases prontas ligadas à formulação</h2>
+      <p class="idea">As mesmas frases da 2, mas o tema, o objetivo e o porquê de cada técnica vêm da formulação de caso (problema, objetivo, intervenção). A atividade combinada na sessão anterior aparece no alto, e você só marca se foi feita.</p>
+      <dl>
+        <div><dt>A favor</dt><dd>Escreve uma vez, na formulação, e usa em todas as sessões. Tem lugar para o que a Resolução CFP 001/2009 pede (demanda e objetivos, evolução, encerramento). O prontuário continua só dizendo o que houve, sem adjetivo, e o juízo de se avançou fica na formulação, como nos seus prontuários.</dd></div>
+        <div><dt>Contra</dt><dd>Depende de a formulação estar feita (sem ela, funciona como a 2). Mais trabalho de construir, e a Plataforma de Formulação de Caso ainda espera o seu teste.</dd></div>
+      </dl>
+      <p class="ref">Base: a sua Plataforma de Formulação de Caso (tipos de campo problema, objetivo e intervenção, comuns a qualquer abordagem, e o "por que esta intervenção"), o prontuário orientado para o problema de Almeida, Cantal e Costa Junior (2008) e o ICANotes, que liga cada nota às metas do plano.</p>
+    </div>
+    <div class="stage">
+      <div class="stage-h"><h3>Sessão 9, 9 de novembro</h3></div>
+      <div class="stage-b">
+        <div class="mock" style="margin-bottom:12px" id="f3-form"></div>
+        <div class="carry"><b>Atividade acordada em 2 de novembro</b>Testar uma previsão na reunião de quinta.</div>
+        <div class="fm-g"><p class="lbl">A atividade foi</p><div class="chips" id="f3-st"></div></div>
+        <div class="fm-g"><p class="lbl">Objetivo trabalhado hoje</p><div class="chips" id="f3-ob"></div></div>
+        <div class="fm-g"><p class="lbl">Técnicas do plano usadas hoje</p><div class="chips" id="f3-iv"></div></div>
+        <div class="field" style="margin-bottom:10px"><label for="f3-rel">O que a paciente relatou</label><textarea id="f3-rel" data-f3="rel">que falou na reunião de quinta e que a crítica que temia não aconteceu</textarea></div>
+        <div class="field" style="margin-bottom:12px"><label for="f3-at">Atividade para a próxima semana</label><input id="f3-at" data-f3="at" value="falará primeiro na reunião de segunda"></div>
+        <p class="lab">Como fica no prontuário</p>
+        <div class="quote" id="f3-out"></div>
+      </div>
+      <div class="stage-f">Na sessão de 16 de novembro, a atividade que aparece no alto é a de hoje.</div>
+    </div>
+  </div></section>
+
+  <section class="band"><div class="wrap">
+    <h2>Lado a lado.</h2>
+    <p class="intro">As quatro primeiras linhas são o que o art. 2º da Resolução CFP 001/2009 pede no registro. A identificação vem do cadastro nas três.</p>
+    <div class="scroll"><table class="cmp">
+      <thead><tr><th scope="col">O que conta</th><th scope="col">1. Texto com modelo</th><th scope="col">2. Frases prontas</th><th scope="col" class="me">3. Frases e formulação</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Demanda e objetivos</th><td class="part2">Num campo à parte, fácil de esquecer</td><td class="part2">Só na frase da primeira sessão</td><td class="me yes">Vêm da formulação, em toda sessão</td></tr>
+        <tr><th scope="row">Evolução com os procedimentos</th><td class="yes">Se você escrever</td><td class="yes">"Além disso, foi realizado..."</td><td class="me yes">A técnica do plano, com o porquê</td></tr>
+        <tr><th scope="row">Encerramento ou encaminhamento</th><td class="part2">Uma nota avulsa</td><td class="yes">Frase pronta</td><td class="me yes">Frase pronta</td></tr>
+        <tr><th scope="row">Documentos emitidos</th><td>Igual nas três: guardados no paciente com data, finalidade e destinatário</td><td>Igual</td><td class="me">Igual</td></tr>
+        <tr><th scope="row">Escreve no seu estilo</th><td class="no">Não, em tópicos</td><td class="yes">Sim</td><td class="me yes">Sim</td></tr>
+        <tr><th scope="row">Atividade da sessão anterior</th><td class="no">Escondida no texto</td><td class="part2">Realizou ou não, e você lembra qual</td><td class="me yes">Aparece sozinha</td></tr>
+        <tr><th scope="row">Falta e reagendamento</th><td class="no">Digitados</td><td class="yes">Um toque</td><td class="me yes">Um toque</td></tr>
+        <tr><th scope="row">Custo de construir</th><td class="yes">Baixo, já existe aqui</td><td class="yes">Baixo, já existe no Controle Único</td><td class="me part2">Médio, precisa da formulação</td></tr>
+      </tbody>
+    </table></div>
+    <div class="rec">
+      <h3>Recomendo a 3: as suas frases prontas, ligadas à formulação de caso.</h3>
+      <p>Na prática é a 2, que você já usa, com a formulação alimentando as lacunas. Sem formulação feita, ela vira a 2, então nada trava.</p>
+      <ul>
+        <li>É o jeito que você já escreve, e o motor das frases já existe no Controle Único.</li>
+        <li>Problema, objetivo e o porquê da técnica moram só na formulação e entram no texto sem redigitar.</li>
+        <li>O prontuário continua factual: diz o que houve, e o juízo clínico fica na formulação, como nos seus 59 prontuários.</li>
+        <li>Para virar produto, as frases viram modelos editáveis, como os modelos da Formulação de Caso, e cada psicólogo começa de um pronto.</li>
+      </ul>
+    </div>
+    <p class="note">Fontes abertas nesta pesquisa: Resolução CFP 001/2009 (com as mudanças da 005/2010), artigo de Almeida, Cantal e Costa Junior (2008), página de anotações de terapia do ICANotes e um texto da Ensora Health sobre SOAP, DAP e BIRP. Do Vault: Prontuário Psicológico, Padrões de Escrita do Prontuário, módulo Clínica do Controle Único e Plataforma de Formulação de Caso. Não achei no GitHub um prontuário clínico de código aberto com notas ligadas a objetivos que valesse copiar.</p>
+  </div></section>
+</section>
+
+<section class="page" data-page="precos" hidden>
+  <div class="hero" style="padding-bottom:10px"><div class="wrap" style="grid-template-columns:minmax(0,1fr)">
+    <div>
+      <h1>O essencial de graça. Pague só pelo que avisa por você.</h1>
+      <p class="lede" style="margin-bottom:0">Valores de exemplo. Nada está à venda.</p>
+    </div>
+  </div></div>
+  <div class="wrap">
+    <div class="plans">
+      <div class="plan"><h3>Essencial</h3><div class="price num">R$ 0 <small>para sempre</small></div><ul><li>Agenda, prontuário e financeiro.</li><li>Pacientes sem limite.</li><li>Recibo e declaração para reembolso.</li><li>Contrato e termo de consentimento.</li></ul><button class="btn" data-act="nav" data-to="app-hoje">Entrar na demonstração</button></div>
+      <div class="plan best"><h3>Completo</h3><div class="price num">R$ 39 <small>por mês</small></div><ul><li>Tudo do Essencial.</li><li>Lembrete enviado pelo WhatsApp.</li><li>Relatório do ano por paciente.</li></ul><button class="btn pri" data-act="nav" data-to="app-financeiro">Ver o financeiro</button></div>
+    </div>
+  </div>
+  <section class="band" style="margin-top:44px"><div class="wrap">
+    <h2>Ao lado das outras.</h2>
+    <p class="intro">O que cada uma anuncia na própria página inicial, comparado com esta demonstração.</p>
+    <div class="scroll"><table class="cmp">
+      <thead><tr><th scope="col">Recurso</th><th scope="col" class="me">Ostinato</th><th scope="col">Sintropia</th><th scope="col">PsicoManager</th><th scope="col">PsiLuz</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Agenda, prontuário e financeiro</th><td class="me yes">Tem</td><td class="yes">Anuncia</td><td class="yes">Anuncia</td><td class="yes">Anuncia</td></tr>
+        <tr><th scope="row">Aviso de paciente sem próxima sessão</th><td class="me yes">Tem</td><td class="no">Não consta</td><td class="no">Não consta</td><td class="no">Não consta</td></tr>
+        <tr><th scope="row">Declaração de reembolso por período</th><td class="me yes">Tem</td><td class="no">Não consta</td><td class="no">Não consta</td><td class="no">Não consta</td></tr>
+        <tr><th scope="row">Recibo e Receita Saúde</th><td class="me part2">Recibo em texto</td><td class="no">Não consta</td><td class="yes">Anuncia</td><td class="yes">Anuncia</td></tr>
+        <tr><th scope="row">Lembrete enviado pelo WhatsApp</th><td class="me part2">Texto para copiar</td><td class="yes">Anuncia</td><td class="yes">Anuncia</td><td class="yes">Com botões</td></tr>
+        <tr><th scope="row">Rascunho de evolução por IA</th><td class="me no">Não tem</td><td class="yes">Anuncia</td><td class="yes">Anuncia</td><td class="yes">Anuncia</td></tr>
+        <tr><th scope="row">Aplicativo do paciente</th><td class="me no">Não tem</td><td class="yes">iPhone e iPad</td><td class="yes">Anuncia</td><td class="yes">Anuncia</td></tr>
+        <tr><th scope="row">Preço</th><td class="me">Exemplo: grátis ou R$ 39 por mês</td><td>R$ 99 por mês ou R$ 890 por ano</td><td class="no">Não consta</td><td class="no">Não consta no trecho lido</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">Páginas iniciais de sintropia.app, psicomanager.com.br e psiluz.com.br, lidas em resumo em 09/11/2026. "Não consta" quer dizer que a página não cita o recurso, não que ele não exista.</p>
+    <div class="faq">
+      <details><summary>Onde ficam os dados desta demonstração?</summary><p>Só no seu navegador. Nada vai para servidor, e o botão Restaurar o exemplo volta tudo ao começo.</p></details>
+      <details><summary>Tem inteligência artificial escrevendo a evolução?</summary><p>Não. A evolução é sua, escrita a partir de um modelo. As concorrentes anunciam rascunho por IA, e essa é hoje a maior diferença a favor delas.</p></details>
+      <details><summary>Funciona no celular?</summary><p>Sim. No celular o menu vai para a barra de baixo e a semana rola de lado dentro do quadro.</p></details>
+    </div>
+  </div></section>
+</section>
+
+<section class="cta" id="cta"><div class="wrap">
+  <div><h2>Abra o consultório de exemplo e mexa em tudo.</h2>
+  <p>Sem cadastro. Dados só neste navegador. Pacientes inventados.</p></div>
+  <button class="btn pri" data-act="nav" data-to="app-hoje">Entrar na demonstração</button>
+</div></section>
+<footer class="foot"><div class="wrap">
+  <span>Ostinato é um nome provisório. Protótipo com dados inventados.</span>
+  <nav aria-label="Rodapé"><button data-act="nav" data-to="agenda">Agenda</button><button data-act="nav" data-to="prontuario">Prontuário</button><button data-act="nav" data-to="financeiro">Financeiro</button><button data-act="nav" data-to="formas">Formas do prontuário</button><button data-act="nav" data-to="precos">Preços</button></nav>
+</div></footer>
+</main>
+
+<!-- ============ APP ============ -->
+<div id="app" hidden>
+  <div class="mtop">
+    <span class="logo"><svg viewBox="0 0 100 100" aria-hidden="true" data-sym></svg>Ostinato</span>
+    <span class="sp"></span>
+    <button class="icon" data-act="busca" aria-label="Buscar paciente ou tela"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></button>
+    <button class="icon" data-act="theme" aria-label="Trocar entre claro e escuro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor"/></svg></button>
+    <button class="icon" data-act="nav" data-to="app-config" aria-label="Configurações"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
+    <button class="btn sm" data-act="nav" data-to="inicio">Sair</button>
+  </div>
+  <div class="shell">
+    <aside class="rail">
+      <button class="logo" data-act="nav" data-to="app-hoje" aria-label="Ostinato, tela Início"><svg viewBox="0 0 100 100" aria-hidden="true" data-sym></svg>Ostinato</button>
+      <nav aria-label="Plataforma">
+        <button data-act="nav" data-to="app-hoje"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg><span>Início</span></button>
+        <button data-act="nav" data-to="app-pacientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span>Pacientes</span></button>
+        <button data-act="nav" data-to="app-agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/></svg><span>Agenda</span></button>
+        <button data-act="nav" data-to="app-financeiro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/></svg><span>Financeiro</span></button>
+      </nav>
+      <button class="bq-abre" data-act="busca"><span>Buscar</span><kbd>Ctrl K</kbd></button>
+      <div class="end">
+        <span id="modo-txt">Consultório de exemplo. Pacientes inventados, guardados só neste navegador.</span>
+        <button class="link" data-act="meus-abre" id="meus-abre">Usar meus dados do Controle Único</button>
+        <button class="link" data-act="meus-ex" id="meus-ex" hidden>Voltar ao exemplo</button>
+        <button class="link" data-act="reset" id="resetbtn">Restaurar o exemplo</button>
+        <input type="file" id="meusdados" accept=".json,application/json" hidden>
+        <button class="link" data-act="nav" data-to="app-config">Configurações</button>
+        <button class="link" data-act="atalhos">Atalhos do teclado</button>
+        <button class="link" data-act="theme">Claro ou escuro</button>
+        <button class="link" data-avx="rostos" id="rostos-bt" title="Troca todos os rostos pelas iniciais, para compartilhar a tela">Esconder rostos</button>
+        <button class="link" data-act="nav" data-to="inicio">Sair da demonstração</button>
+      </div>
+    </aside>
+    <div class="main" id="main"></div>
+  </div>
+</div>
+
+<div id="modal" hidden><div class="sheet" role="dialog" aria-modal="true" id="sheet"></div></div>
+<div id="pop" role="dialog" aria-label="Opções do horário" hidden></div>
+<div id="toast" role="status" hidden></div>
+
+<script src="js/personagens.js?v=61"></script>
+<script src="js/pacientes.js?v=61"></script>
+<script src="js/financeiro.js?v=61"></script>
+<script src="js/app.js?v=61"></script>
+<script src="js/hoje.js?v=61"></script>
+<script src="js/busca.js?v=61"></script>
+<script src="js/caderno.js?v=61"></script>
+<script src="js/modelos.js?v=61"></script>
+<script src="js/lousa.js?v=61"></script>
+<script src="js/mapa.js?v=61"></script>
+<script src="js/sessao.js?v=61"></script>
+</body>
+</html>

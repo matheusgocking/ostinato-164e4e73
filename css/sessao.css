@@ -1,0 +1,142 @@
+/* Modo sessão (js/sessao.js, esboço de Matheus de 19/11/2026).
+   Barra em cima; notas à esquerda; no meio a tela da chamada e, embaixo, o prontuário; plano de ação à direita.
+   Cobre o app inteiro. Vidro nos painéis, a tela da chamada sempre escura (é vídeo) e o prontuário branco (é papel). */
+html.ss-on{overflow:hidden}
+.ss{position:fixed;inset:0;z-index:18;display:grid;grid-template-rows:auto minmax(0,1fr);
+  background:color-mix(in srgb,var(--vd-fundo,var(--desk)) 92%,transparent);backdrop-filter:var(--vd-blur,blur(20px));-webkit-backdrop-filter:var(--vd-blur,blur(20px));
+  color:var(--ink);animation:ss-entra var(--dur-3) var(--ease-out)}
+@keyframes ss-entra{from{opacity:0}}
+
+/* ---- barra ---- */
+.ss-bar{display:flex;align-items:center;gap:var(--sp-24);padding:var(--sp-12) var(--sp-20);border-bottom:1px solid var(--vd-fio,var(--line))}
+.ss-quem{min-width:0;flex:1}
+.ss-quem p{margin:0;font-size:var(--fs-2);color:var(--muted)}
+.ss-quem h1{margin:0;font:600 var(--fs-8)/1.15 var(--display);letter-spacing:-.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ss-rel{margin:0;display:flex;align-items:baseline;gap:var(--sp-8);white-space:nowrap}
+.ss-rel b{font:500 var(--fs-9)/1 var(--display);font-variant-numeric:lining-nums tabular-nums;letter-spacing:-.02em}
+.ss-rel span{font-size:var(--fs-3);color:var(--muted)}
+.ss-rel.w b,.ss-rel.w span{color:var(--warn)}
+.ss-bts{display:flex;gap:var(--sp-8);flex:none}
+
+/* ---- as quatro áreas ---- */
+.ss-g{display:grid;min-height:0;padding:var(--sp-12);gap:var(--sp-12);
+  grid-template-columns:minmax(210px,.9fr) minmax(0,2.2fr) minmax(230px,1fr);
+  grid-template-rows:minmax(0,1.55fr) minmax(0,1fr);
+  grid-template-areas:"notas tela plano" "notas pront plano"}
+.ss-notas{grid-area:notas} .ss-tela{grid-area:tela} .ss-pront{grid-area:pront} .ss-plano{grid-area:plano}
+.ss-p{min-height:0;min-width:0;display:flex;flex-direction:column;border:1px solid var(--vd-painel-b,var(--line2));border-radius:var(--r-lg);
+  background:var(--vd-painel,var(--raise));box-shadow:var(--vd-luz,none);overflow:hidden}
+.ss-p h2{flex:none;display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp-12);margin:0;padding:var(--sp-12) var(--sp-16) var(--sp-8);font-size:var(--fs-3);font-weight:600;color:var(--muted);letter-spacing:0;text-transform:none}
+.ss-p h2 small{font-size:var(--fs-1);font-weight:400}
+
+.ss-cdn{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 var(--sp-16) var(--sp-12)}
+.ss-abas button{min-height:28px;padding:0 var(--sp-8);font-size:var(--fs-1)}
+.ss-nv{display:inline-flex;align-items:center;gap:var(--sp-4);margin-left:var(--sp-12);color:var(--accent);font-weight:600}
+.ss-notas:focus-within,.ss-pront:focus-within{border-color:var(--accent)}
+
+/* a tela da chamada */
+.ss-tela{position:relative;min-height:0;border-radius:var(--r-lg);background:#16152E;border:1px solid rgba(255,255,255,.1);color:#ECEAF7;display:grid;place-items:center;overflow:hidden}
+.ss-cham{max-width:30em;padding:var(--sp-24);text-align:center}
+.ss-cham p{margin:0;font-size:var(--fs-3);color:#A9A6CC}
+.ss-cham .ss-cn{margin-bottom:var(--sp-8);font:500 var(--fs-9)/1.15 var(--display);letter-spacing:-.02em;color:#ECEAF7}
+.ss-modo{position:absolute;top:var(--sp-12);right:var(--sp-12);width:40px;height:40px;border-radius:50%;display:grid;place-items:center;
+  border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#ECEAF7;cursor:pointer;transition:background var(--dur-1)}
+.ss-modo:hover{background:rgba(255,255,255,.2)}
+.ss-modo[aria-pressed="true"]{background:#C4BEF7;border-color:#C4BEF7;color:#16143A}
+.ss-modo:focus-visible{outline-color:#C4BEF7}
+
+/* o prontuário: papel */
+.ss-pront{background:var(--paper,#fff);color:var(--paper-ink,#141414)}
+.ss-pront h2{color:#586176}
+.ss-doc{flex:1;min-height:0;overflow:auto;padding:0 var(--sp-16) var(--sp-16);font-size:var(--fs-4);line-height:1.55;outline:0}
+.ss-doc p{margin:0 0 var(--sp-8)}
+
+/* o plano de ação */
+#ss-plano{flex:1;min-height:0;display:flex;flex-direction:column;overflow:auto;padding:0 var(--sp-16) var(--sp-16)}
+.ss-comb{padding:var(--sp-8) 0 var(--sp-12);border-bottom:1px solid var(--vd-fio,var(--line));font-size:var(--fs-3)}
+.ss-comb b{display:block;font-size:var(--fs-2);font-weight:600;color:var(--muted)}
+.ss-pl{list-style:none;margin:0;padding:0}
+.ss-pl li{display:flex;align-items:flex-start;gap:var(--sp-8);border-bottom:1px solid var(--vd-fio,var(--line))}
+.ss-pl label{flex:1;min-width:0;display:flex;align-items:flex-start;gap:var(--sp-12);padding:var(--sp-12) 0;cursor:pointer;font-size:var(--fs-4);line-height:1.4}
+.ss-pl input{flex:none;width:18px;height:18px;margin:2px 0 0;padding:0}
+.ss-pl li.ok span{color:var(--muted);text-decoration:line-through}
+.ss-pl li>button{flex:none;width:32px;height:44px;border:0;background:none;color:var(--muted);font-size:var(--fs-6);cursor:pointer;opacity:0}
+.ss-pl li:hover>button,.ss-pl li>button:focus-visible{opacity:1}
+.ss-pl li>button:hover{color:var(--bad)}
+.ss-vazio{margin:var(--sp-12) 0;font-size:var(--fs-3);color:var(--muted)}
+.ss-novo{display:flex;gap:var(--sp-8);margin-top:auto;padding-top:var(--sp-16)}
+.ss-novo input{min-height:var(--h-md);background:var(--vd-in-raise,var(--raise))}
+
+/* modo sessão desligado: só a tela */
+.ss.so-tela .ss-g{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr);grid-template-areas:"tela"}
+.ss.so-tela .ss-p{display:none}
+
+@media (max-width:1000px){
+  .ss-g{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);grid-template-rows:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr);grid-template-areas:"tela tela" "pront plano" "notas plano"}
+}
+@media (max-width:700px){
+  .ss{display:block;overflow:auto}
+  .ss-p{flex:none;overflow:visible} #ss-plano{overflow:visible}
+  .ss-bar{flex-wrap:wrap;gap:var(--sp-8) var(--sp-16);padding:calc(var(--sp-12) + env(safe-area-inset-top,0px)) var(--sp-16) var(--sp-12)}
+  .ss-quem{flex-basis:100%} .ss-quem h1{font-size:var(--fs-7)}
+  .ss-rel b{font-size:var(--fs-8)} .ss-bts{margin-left:auto}
+  .ss-g{display:flex;flex-direction:column}
+  .ss-tela{aspect-ratio:16/10;flex:none}
+  .ss-pront{order:1} .ss-notas{order:2} .ss-plano{order:3}
+  .ss-cdn .cdn-ler,.ss-cdn .cdn-esc{min-height:140px} .ss-doc{overflow:visible}
+  .ss-pl li>button{opacity:1}
+  .ss.so-tela .ss-tela{aspect-ratio:auto;min-height:70vh}
+}
+@media (prefers-reduced-motion: reduce){ .ss{animation:none} }
+@media (prefers-reduced-transparency: reduce){ .ss{background:var(--vd-fundo,var(--desk));backdrop-filter:none;-webkit-backdrop-filter:none} }
+
+/* ---- lousa (js/lousa.js): o Excalidraw ocupa a tela e o nome de quem está na chamada sobe para a faixa de cima ---- */
+.ss-lb{position:absolute;top:var(--sp-12);left:var(--sp-12);z-index:3;display:inline-flex;align-items:center;gap:var(--sp-6);min-height:40px;padding:0 var(--sp-16);border-radius:var(--r-full);
+  border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#ECEAF7;font-weight:600;font-size:var(--fs-3);cursor:pointer}
+.ss-lb:hover{background:rgba(255,255,255,.2)}
+.ss-lb[aria-pressed="true"]{background:#C4BEF7;border-color:#C4BEF7;color:#16143A}
+.ss-modo{z-index:3}
+.ss-lousa{display:none}
+.ss-tela.com-lousa{display:grid;grid-template-rows:64px minmax(0,1fr);place-items:stretch}
+.ss-tela.com-lousa .ss-lousa{display:block;grid-row:2;min-height:0;position:relative;background:#fff}
+.ss-tela.com-lousa .ss-lousa>div{position:absolute;inset:0}
+.ss-tela.com-lousa .ss-cham{position:absolute;z-index:2;top:8px;left:50%;transform:translateX(-50%);max-width:none;padding:0 var(--sp-16);height:48px;display:flex;align-items:center;gap:var(--sp-12);border-radius:var(--r-md);background:rgba(255,255,255,.08);text-align:left}
+.ss-tela.com-lousa .ss-cham .ss-cn{margin:0;font-size:var(--fs-4)}
+.ss-tela.com-lousa .ss-cham .ss-ch-t,.ss-tela.com-lousa .ss-cham .ss-mf{display:none}
+.ss-tela.com-lousa .ss-cham{flex-direction:row}
+.ss-tela.com-lousa .ss-ir{min-height:34px;padding:0 var(--sp-12);font-size:var(--fs-3)}
+
+/* ---- chamada: o link do Meet do paciente abre numa janela ao lado (o Meet não roda dentro de outro site) ---- */
+.ss-cham{display:flex;flex-direction:column;align-items:center;gap:var(--sp-12)}
+.ss-cham .ss-cn{margin-bottom:0}
+.ss-ir{display:inline-flex;align-items:center;gap:var(--sp-8);min-height:48px;padding:0 var(--sp-24);border:0;border-radius:var(--r-full);background:#C4BEF7;color:#16143A;font-weight:600;font-size:var(--fs-4);cursor:pointer;white-space:nowrap}
+.ss-ir:hover{background:#D8D4FA}
+.ss-ir:focus-visible,.ss-mb:focus-visible,.ss-tr:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.ss-lk{display:block;margin-top:var(--sp-4);color:#ECEAF7;overflow-wrap:anywhere}
+.ss-tr{min-height:32px;padding:0;border:0;background:none;color:#C4BEF7;font:inherit;font-weight:600;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
+.ss-mf{display:flex;flex-direction:column;gap:var(--sp-8);width:min(100%,26em);text-align:left}
+.ss-mf label{font-size:var(--fs-3);font-weight:600;color:#ECEAF7}
+.ss-mf div{display:flex;gap:var(--sp-8)}
+.ss-mf input{flex:1;min-width:0;min-height:44px;padding:0 var(--sp-12);border-radius:var(--r-md);border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.08);color:#fff;font-size:var(--fs-4)}
+.ss-mf input::placeholder{color:#8F8CB5}
+.ss-mf input:focus-visible{outline:2px solid #C4BEF7;outline-offset:1px}
+.ss-mf input[aria-invalid="true"]{border-color:#FFB4A8}
+.ss-mb{flex:none;min-height:44px;padding:0 var(--sp-16);border-radius:var(--r-md);border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.12);color:#ECEAF7;font-weight:600;font-size:var(--fs-3);cursor:pointer}
+.ss-mb:hover{background:rgba(255,255,255,.22)}
+.ss-cham .ss-ch-t.er{color:#FFB4A8}
+.ls-msg{margin:0;padding:var(--sp-24);color:#3A3F4F;font-size:var(--fs-3)}
+@media (max-width:700px){ .ss-tela.com-lousa{aspect-ratio:auto;height:78vh} .ss-tela.com-lousa .ss-cham{display:none} }
+
+.ss-notas h2{flex-wrap:wrap}
+
+/* no celular a tela da chamada cresce com o que tem dentro, e o nome desce para não ficar embaixo do botão Lousa */
+@media (max-width:700px){ .ss-tela:not(.com-lousa){aspect-ratio:auto;min-height:62vw} .ss-tela:not(.com-lousa) .ss-cham{padding-top:64px} }
+
+/* para quais sessões o link vale: quem usa escolhe ao colar (todas as do paciente, ou só esta) */
+.ss-mf .ss-mq{flex-wrap:wrap;gap:var(--sp-4) var(--sp-16)}
+.ss-mf .ss-mq label{display:inline-flex;align-items:center;gap:var(--sp-6);min-height:32px;font-weight:400;color:#D9D6F2;cursor:pointer}
+.ss-mq input{flex:none;min-height:0;width:16px;height:16px;margin:0;padding:0;accent-color:#C4BEF7}
+.ss-qd{display:block;color:#A9A6CC}
+
+/* campo do link com letra de 16 px: abaixo disso o iPhone dá zoom ao tocar */
+.ss-mf input{font-size:var(--fs-5)}

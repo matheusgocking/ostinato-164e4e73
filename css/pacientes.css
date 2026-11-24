@@ -1,0 +1,119 @@
+/* Lista de pacientes (js/pacientes.js): busca, cabeçalho "≡ Nome … +", uma pessoa por linha com selinho na foto.
+   23/11/2026 (pedido de Matheus: "não estou gostando do visual"): saiu a caixa em volta da tabela (a página é a superfície,
+   como no Início), o nome foi para a letra da interface, o status perdeu a pílula (ponto e palavra), as colunas se
+   distribuem pela largura em vez de se empilharem à direita, e Horário e Próxima sessão já vêm ligadas. */
+/* título de tela no mesmo tamanho do Início (.h5-t em painel.css): 30 px, com a frase de situação embaixo */
+.head.hg h1{font-size:var(--fs-9);line-height:1.1}
+.head.hg p{font-size:var(--fs-4);margin-bottom:var(--sp-12)}
+.pbusca{position:relative;max-width:420px}
+.pbusca svg{position:absolute;left:var(--sp-12);top:50%;width:18px;height:18px;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.pbusca input{width:100%;min-height:44px;border-radius:var(--r-sm);border:1px solid var(--vd-painel-b);background:var(--vd-painel);padding:0 var(--sp-12) 0 var(--sp-40)}
+.pbusca input:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.ptab{min-width:0}
+.phead,.prow{display:flex;align-items:center;gap:var(--sp-16);width:100%}
+.phead{min-height:44px;border-bottom:1.5px solid var(--ink);font-size:var(--fs-3);color:var(--muted)}
+.pth{min-height:44px;background:none;border:0;padding:0;border-radius:var(--r-xs);font-weight:600;color:inherit;text-align:left;white-space:nowrap}
+.pth:hover,.pth.on{color:var(--ink)}
+.ib{width:40px;height:40px;flex:none;display:grid;place-items:center;border-radius:var(--r-sm);border:0;background:none;color:var(--muted)}
+.ib:hover,.ib[aria-expanded="true"]{background:var(--vd-fio);color:var(--ink)}
+.ib svg{width:17px;height:17px}
+.ib:focus-visible,.pth:focus-visible,.prow:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.prow{min-height:60px;padding:var(--sp-8) 0;border:0;border-bottom:1px solid var(--vd-fio);background:none;color:var(--ink);font-size:var(--fs-5);text-align:left;transition:background-color var(--dur-1) ease}
+.prow:hover{background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.pav{position:relative;display:flex;flex:none}
+.prow .pav{width:40px}
+.pav .av{display:block;width:40px;height:40px;border-radius:50%;overflow:hidden;background:var(--sunk)}
+.pav .av svg{display:block;width:100%;height:100%}
+.pav .duo{display:flex}.pav .duo .av+.av{margin-left:-14px}
+.prow .pav .duo .av{width:30px;height:30px}.prow .pav .duo .av+.av{margin-left:-10px;margin-top:10px;box-shadow:0 0 0 2px var(--desk)}
+.selo{position:absolute;right:-4px;bottom:-3px;width:16px;height:16px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;box-shadow:0 0 0 2px var(--desk)}
+.selo svg{width:9px;height:9px}
+/* as colunas dividem a largura: nome mais largo, as outras iguais, tudo alinhado à esquerda */
+.ptx{flex:1.5 1 0;min-width:0;display:flex;flex-direction:column}
+.pcol,.pstc{flex:1 1 0;min-width:0}
+.pnm{font-weight:600;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.psub{display:none;font-size:var(--fs-3);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.phead .ptx{display:block}
+.prow .pcol{font-size:var(--fs-4);font-weight:400;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pcol i,.psub i{font-style:normal;color:var(--muted)}
+.pvai{flex:none;width:40px;height:16px;color:var(--muted)}
+.pgrp{display:flex;align-items:center;gap:var(--sp-8);padding:var(--sp-24) 0 var(--sp-8);font-size:var(--fs-3);font-weight:600;color:var(--muted);border-bottom:1px solid var(--vd-fio)}
+.pgrp .selo{position:static;box-shadow:none}
+.pgrp span{font-weight:400}
+.ppop{position:absolute;z-index:60;min-width:240px;padding:var(--sp-8);border-radius:var(--r-md);background:var(--vd-forte);border:1px solid var(--vd-painel-b);box-shadow:var(--vd-sombra);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);font-size:var(--fs-3);color:var(--ink);animation:ppop var(--dur-2) var(--ease-out) both}
+@keyframes ppop{from{opacity:0;transform:scale(.96) translateY(-4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.ppop{animation:none}}
+.ppop h3{font-size:var(--fs-2);font-weight:600;color:var(--muted);margin:var(--sp-8) var(--sp-12) var(--sp-4)}
+.ppop .o{display:flex;align-items:center;gap:var(--sp-12);width:100%;min-height:40px;padding:var(--sp-8) var(--sp-12);border:0;background:none;border-radius:var(--r-sm);text-align:left;color:inherit}
+.ppop .o:hover{background:var(--vd-fio)}
+.ppop .o[aria-checked="true"]{font-weight:600}
+.ppop .o[aria-checked="true"]::after{content:"";margin-left:auto;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.ppop hr{border:0;border-top:1px solid var(--vd-fio);margin:var(--sp-6) 0}
+.ppop .sw{display:flex;align-items:center;gap:var(--sp-12);min-height:40px;padding:var(--sp-8) var(--sp-12);border-radius:var(--r-sm);cursor:pointer}
+.ppop .sw:hover{background:var(--vd-fio)}
+.ppop .sw input{appearance:none;width:32px;height:18px;border-radius:var(--r-full);background:var(--line2);position:relative;margin:0 0 0 auto;cursor:pointer;transition:background-color var(--dur-2) ease}
+.ppop .sw input::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform var(--dur-2) var(--ease-out)}
+.ppop .sw input:checked{background:var(--accent)}
+.ppop .sw input:checked::after{transform:translateX(14px)}
+
+/* Status, calculado sozinho (16/11/2026): ponto e palavra. "Em atendimento" fica quieto; o que pede atenção vem na cor. */
+.pst{display:inline-flex;align-items:center;gap:var(--sp-8);font-size:var(--fs-4);white-space:nowrap;color:var(--muted)}
+.pst::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--c)}
+.st-atend{--c:var(--ok)} .st-novo{--c:var(--accent)} .st-semsess{--c:var(--warn)} .st-faltando{--c:var(--bad)}
+.st-novo,.st-semsess,.st-faltando{color:var(--c);font-weight:600}
+.st-enc{--c:var(--muted)} .st-enc::before{background:none;box-shadow:inset 0 0 0 1.5px var(--c)}
+@media (max-width:900px){ .prow .pcol:nth-of-type(n+5),.phead .pcol:nth-of-type(n+4){display:none} }
+@media (max-width:640px){
+  .phead .pcol,.prow .pcol,.pstc{display:none}  /* no celular o selinho da foto e a linha de baixo dizem a situação */
+  .psub{display:block}
+  .psub b{font-weight:600;color:var(--c)}
+  .pvai{width:16px}
+  .prow,.phead{gap:var(--sp-12)}
+}
+
+/* Avatar da ficha e editor (js/personagens.js, 23/11/2026): massinha 3D, sem foto real. */
+.av-fi{position:relative;display:inline-flex;flex:none;padding:0;border:0;background:none;border-radius:50%;cursor:pointer}
+.av-fi .av{display:block;width:64px;height:64px;border-radius:50%;overflow:hidden;background:var(--sunk);box-shadow:0 0 0 2px var(--vd-painel-b)}
+.av-fi .av svg,.av-ed .av svg{display:block;width:100%;height:100%}
+.av-fi .duo{display:flex}.av-fi .duo .av+.av{margin-left:-20px}
+.av-fi:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.av-lapis{position:absolute;right:-2px;bottom:-2px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);box-shadow:0 0 0 2px var(--raise)}
+.av-lapis svg{width:13px;height:13px}
+.av-fi[aria-expanded="true"] .av{box-shadow:0 0 0 2px var(--accent)}
+.av-ed{margin-top:var(--sp-16)}
+.av-ed-in{display:grid;grid-template-columns:160px 1fr;gap:var(--sp-24);align-items:start}
+.av-ed-hero{text-align:center}
+.av-ed-hero .av{display:block;width:144px;height:144px;margin:0 auto;border-radius:50%;overflow:hidden}
+.av-ed-hero p{margin:var(--sp-8) 0 0;color:var(--muted);font-size:var(--fs-3)}
+.av-ed-op{display:grid;grid-template-columns:96px 1fr;gap:var(--sp-8) var(--sp-16);align-items:center;min-width:0}
+.av-t{color:var(--muted);font-size:var(--fs-3)}
+.av-ch{display:flex;flex-wrap:wrap;gap:var(--sp-4);align-items:center;min-width:0}
+.av-sw{width:44px;height:44px;display:grid;place-items:center;border:0;background:none;border-radius:50%;cursor:pointer;padding:0}
+.av-sw i{display:block;width:30px;height:30px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.av-sw[aria-pressed="true"] i,.av-mini[aria-pressed="true"] .av{outline:2px solid var(--accent);outline-offset:2px}
+.av-mini{width:44px;height:44px;border:0;padding:0;background:none;border-radius:50%;cursor:pointer}
+.av-mini .av{display:block;width:40px;height:40px;margin:2px;border-radius:50%;overflow:hidden}
+.av-pill{min-height:44px;padding:0 var(--sp-16);border-radius:var(--r-full);border:1px solid var(--line2);background:none;color:var(--ink);font:inherit;font-size:var(--fs-3);cursor:pointer}
+.av-pill[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.av-sw:focus-visible,.av-mini:focus-visible,.av-pill:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.av-ed .btn.pri{margin-left:auto}
+@media (max-width:640px){
+  .av-ed-in{grid-template-columns:1fr}
+  .av-ed-hero .av{width:112px;height:112px}
+  .av-ed-op{grid-template-columns:1fr;gap:var(--sp-4)}
+  .av-t{margin-top:var(--sp-8)}
+  .av-fi .av{width:52px;height:52px}
+}
+
+/* Rosto pequeno ao lado do nome nas outras telas (avM em app.js, mini em personagens.js, 23/11/2026) */
+.avm{display:inline-flex;vertical-align:middle;flex:none;margin-right:var(--sp-8);--s:28px}
+.avm .av{display:block;width:var(--s);height:var(--s);border-radius:50%;overflow:hidden;background:var(--sunk)}
+.avm .av svg{display:block;width:100%;height:100%}
+.avm .duo{display:inline-flex}.avm .duo .av+.av{margin-left:calc(var(--s) * -.4);box-shadow:0 0 0 1.5px var(--raise)}
+.avm-xs{--s:18px;margin-right:var(--sp-4)}
+.avm-m{--s:36px}
+.avm-l{--s:48px;margin-right:var(--sp-4)}
+h1 .avm,h2 .avm,h4 .avm{position:relative;top:-.08em}
+.avm-vazio{width:var(--s);height:var(--s)} /* despesa no Financeiro: espaço do rosto, para alinhar com as sessões */
+@media (max-width:640px){.avm-vazio{display:none}}

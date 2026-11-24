@@ -1,0 +1,21 @@
+/* Busca única (js/busca.js): caixa de vidro no alto da tela, por cima de tudo. */
+#busca{position:fixed;inset:0;z-index:40;display:flex;justify-content:center;align-items:flex-start;padding:max(12vh,calc(16px + env(safe-area-inset-top,0px))) var(--sp-16) var(--sp-16);background:rgba(8,11,18,.5);animation:aparece var(--dur-2) ease both}
+.bq{width:100%;max-width:520px;max-height:min(520px,76vh);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--vd-painel-b,var(--line2));border-radius:var(--r-lg);background:var(--vd-forte,var(--raise));box-shadow:var(--vd-sombra,var(--shadow));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);animation:entra-baixo var(--dur-3) var(--ease-out) both}
+.bq input{flex:none;width:100%;min-height:56px;padding:0 var(--sp-20);border:0;border-bottom:1px solid var(--vd-fio,var(--line));border-radius:0;background:none;color:var(--ink);font-size:var(--fs-6);outline:0}
+.bq input::placeholder{color:var(--faint)}
+.bq-r{flex:1;overflow-y:auto;padding:var(--sp-6)}
+.bq-l{display:grid;grid-template-columns:32px minmax(0,1fr) auto;align-items:center;gap:var(--sp-12);width:100%;min-height:44px;padding:0 var(--sp-12);background:none;border:0;border-radius:var(--r-md);text-align:left;color:var(--ink);font-size:var(--fs-4);cursor:pointer}
+.bq-l b{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bq-l span:last-child{font-size:var(--fs-2);color:var(--muted)}
+.bq-l:hover{background:var(--vd-fio,var(--line))}
+.bq-l[aria-selected="true"]{background:var(--accent-soft)}
+.bq-t{justify-self:center;width:10px;height:10px;border-radius:50%;border:1.5px solid var(--dot)}
+.bq-av .av{width:28px;height:28px;box-shadow:none} .bq-av .duo .av+.av{margin-left:-12px} .bq-av{justify-self:center}
+.bq-vazio{margin:0;padding:var(--sp-24) var(--sp-16);color:var(--muted);font-size:var(--fs-3)}
+.bq-p{flex:none;margin:0;padding:var(--sp-8) var(--sp-20);border-top:1px solid var(--vd-fio,var(--line));font-size:var(--fs-1);color:var(--muted)}
+/* o botão que abre a busca, no menu lateral */
+.bq-abre{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-8);width:100%;min-height:36px;margin-top:var(--sp-16);padding:0 var(--sp-12);border:1px solid var(--vd-fio,var(--line2));border-radius:var(--r-md);background:none;color:var(--muted);font-size:var(--fs-3);cursor:pointer;transition:border-color var(--dur-1),color var(--dur-1)}
+.bq-abre:hover{color:var(--ink);border-color:var(--ink)}
+.bq-abre kbd{font:inherit;font-size:var(--fs-1);color:var(--faint)}
+@media (max-width:900px){ .bq-abre{display:none} .bq-p{display:none} #busca{padding-top:calc(12px + env(safe-area-inset-top,0px))} }
+@media (prefers-reduced-transparency: reduce){ .bq{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--raise)} }
