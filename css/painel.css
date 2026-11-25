@@ -162,6 +162,10 @@ button.h5-m:hover{background:color-mix(in srgb,var(--ink) 4%,transparent)}
 .ini-px b{font-weight:600}
 .ini-px-q{color:var(--muted)}
 .ini-px.agora .ini-px-r,.ini-px.agora .ini-px-q{color:var(--accent);font-weight:600}
+/* a regra geral .agora de base.css (a linha do "agora" da agenda: 26 px de altura, letra pequena, fio vermelho) vazava para cá
+   durante a sessão e espremia a faixa; aqui ela é desfeita (25/11/2026) */
+.ini-px.agora{height:auto;font-size:inherit;font-weight:400;color:inherit}
+.ini-px.agora::after{content:none}
 .ini-px>.btn{flex:none;min-height:44px}
 @media (max-width:700px){ .ini-px{flex-wrap:wrap} .ini-px>.btn{width:100%} }
 @media (max-width:700px){

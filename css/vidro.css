@@ -81,6 +81,18 @@ body::before{background:transparent}
     backdrop-filter:var(--vd-blur);-webkit-backdrop-filter:var(--vd-blur)}
 }
 
+/* Modo leve (25/11/2026, retorno de quem viu o link de demonstração: o vidro pesa em computador fraco, e muito psicólogo usa um).
+   O que custa é o desfoque (backdrop-filter), então o modo leve tira só ele e deixa opaco o que flutua por cima de texto;
+   as manchas do fundo e a transparência sem desfoque continuam, e o visual quase não muda.
+   Liga sozinho em máquina com pouca memória ou poucos núcleos (script no <head> do index.html), e à mão pelo
+   "Ligar modo leve" no pé do menu; ?leve=1 ou ?leve=0 no endereço forçam, para comparar. */
+:root[data-leve]{--vd-blur:none; --vd-forte:var(--raise)}
+:root[data-leve] .top{background:var(--vd-fundo)}
+:root[data-leve] .ss{background:var(--vd-fundo)}
+:root[data-leve] .top,:root[data-leve] .rail,:root[data-leve] .sheet,:root[data-leve] #pop,:root[data-leve] .cd-pop,:root[data-leve] .pop,
+:root[data-leve] .mais-m,:root[data-leve] .ppop,:root[data-leve] .fo-panel,:root[data-leve] .bq,:root[data-leve] .mp-pop,:root[data-leve] .ss{
+  backdrop-filter:none;-webkit-backdrop-filter:none}
+
 /* menos transparência pedida pelo sistema: tudo opaco, sem desfoque */
 @media (prefers-reduced-transparency: reduce){
   :root{--vd-casca:var(--raise); --vd-painel:var(--raise); --vd-forte:var(--raise); --vd-solido:var(--desk)}

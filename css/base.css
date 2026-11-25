@@ -9,7 +9,12 @@
 /* Ostinato (23/11/2026). Cores: o índigo e lilás de sempre. Matheus testou areia e cobalto no mesmo dia e mandou voltar ao índigo
    ("a cor devia ser meio que índigo") e à transparência; a taste-skill proíbe violeta, mas vale a decisão dele.
    Letras: Newsreader em peso 400 no nome e nos títulos do site (ele recusou o "negrito" da Gloock) e Hanken Grotesk na interface,
-   o par que a taste-skill indica para clínica. Cópia de antes em "Backup antes do Ostinato 23-11". */
+   o par que a taste-skill indica para clínica. Cópia de antes em "Backup antes do Ostinato 23-11".
+   Títulos sem serifa (25/11/2026, retorno de quem viu o link de demonstração: a serifa nos títulos grandes
+   estava "muito marcada" e dava um ar acadêmico; sem serifa passa simplicidade e dia a dia). --display virou a
+   Bricolage Grotesque (a mesma que Matheus escolheu na folha Névoa do afunilamento). A serifa (--serif, Newsreader)
+   fica só onde há documento ou leitura: a opção de letra da folha do prontuário e o "i" do mapa.
+   Cópia de antes na pasta de backup de 25-11; quem pediu e por quê está na nota de estado do projeto. */
 :root{
   --desk:#F2F4F7; --raise:#FBFCFD; --sunk:#E6E9EF; --ink:#1C1A47; --muted:#586176; --faint:#5F687B; --dot:#747D90; --line:#D5DAE3; --line2:#B4BCCB;
   --accent:#4B43B0; --accent-ink:#FFFFFF; --accent-soft:#E3E1F7; --bar2:#C4BEF7;
@@ -18,7 +23,8 @@
   --paper:#FFFFFF; --paper-ink:#141414;
   --bg:var(--desk); --tint:var(--desk); --surface:var(--raise); --line-2:var(--line2); --logo-ink:var(--ink); --logo-dot:var(--accent);
   --shadow:0 12px 32px -16px rgba(8,12,24,.45),0 1px 2px rgba(8,12,24,.08);
-  --display:"Newsreader",Georgia,"Times New Roman",serif;
+  --display:"Bricolage Grotesque","Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
   --body:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
   --gl:max(16px, env(safe-area-inset-left, 0px)); --gr:max(16px, env(safe-area-inset-right, 0px));
 }
@@ -52,7 +58,7 @@ input[type=checkbox]{accent-color:var(--ink)}
 h1,h2,h3,h4,p{margin:0}
 h1,h2{font-weight:600;letter-spacing:-.02em;text-wrap:balance}  /* taste-skill e unslop: título sem 700 ou 800 */
 h3,h4{font-weight:600}
-#site h1,#site h2,.serif{font-family:var(--display);font-weight:400;letter-spacing:-.018em}
+#site h1,#site h2,.serif{font-family:var(--display);font-weight:400;letter-spacing:-.03em}
 .logo{font-family:var(--display);font-weight:400}
 .num,.t,.v,.h{font-variant-numeric:tabular-nums}
 .muted{color:var(--muted)}
@@ -613,7 +619,7 @@ table.cmp{border-collapse:collapse;width:100%;min-width:680px;font-size:var(--fs
 .folha.b-dupla::before{border:3px double #333}
 .folha.b-simples::before{border:1px solid #333}
 .f-times{font-family:"Times New Roman",Tinos,Times,serif}
-.f-lit{font-family:var(--display)}
+.f-lit{font-family:var(--serif)}
 .f-arial{font-family:Arial,"Helvetica Neue",sans-serif}
 .folha.just .f-doc,.folha.just .f-ids{text-align:justify;hyphens:auto}
 .f-tit{text-align:center;font-weight:700;font-size:1.4em;margin-bottom:1.4em;letter-spacing:.01em}

@@ -16,21 +16,37 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
-<link rel="stylesheet" href="css/tokens.css?v=61">
-<link rel="stylesheet" href="css/base.css?v=61">
-<link rel="stylesheet" href="css/vidro.css?v=61">
-<link rel="stylesheet" href="css/pacientes.css?v=61">
-<link rel="stylesheet" href="css/financeiro.css?v=61">
-<link rel="stylesheet" href="css/hoje.css?v=61">
-<link rel="stylesheet" href="css/busca.css?v=61">
-<link rel="stylesheet" href="css/painel.css?v=61">
-<link rel="stylesheet" href="css/sessao.css?v=61">
-<link rel="stylesheet" href="css/caderno.css?v=61">
-<link rel="stylesheet" href="css/mapa.css?v=61">
-<link rel="stylesheet" href="css/modelos.css?v=61">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600&family=Hanken+Grotesk:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,600&display=swap">
+<link rel="stylesheet" href="css/tokens.css?v=62">
+<link rel="stylesheet" href="css/base.css?v=62">
+<link rel="stylesheet" href="css/vidro.css?v=62">
+<link rel="stylesheet" href="css/pacientes.css?v=62">
+<link rel="stylesheet" href="css/financeiro.css?v=62">
+<link rel="stylesheet" href="css/hoje.css?v=62">
+<link rel="stylesheet" href="css/busca.css?v=62">
+<link rel="stylesheet" href="css/painel.css?v=62">
+<link rel="stylesheet" href="css/sessao.css?v=62">
+<link rel="stylesheet" href="css/caderno.css?v=62">
+<link rel="stylesheet" href="css/mapa.css?v=62">
+<link rel="stylesheet" href="css/modelos.css?v=62">
 <script>/* o tema escolhido (claro ou escuro) entra antes de a tela ser desenhada, para a página não piscar na cor errada; a chave é a mesma de KEY+"-tema" em js/app.js */try{var tm0=localStorage.getItem("rastro-demo-v6-tema");if(tm0)document.documentElement.setAttribute("data-theme",tm0)}catch(e){}</script>
 <script>/* ?skin=liso no endereco desliga o vidro e as manchas do fundo, para comparar */if(/[?&]skin=liso/.test(location.search)){var vd=document.querySelector('link[href*="vidro.css"]');if(vd)vd.disabled=true;document.documentElement.setAttribute("data-skin","liso")}</script>
+<script>/* modo leve (25/11/2026): tira o desfoque do vidro, que pesa em computador fraco; regras em css/vidro.css.
+   Vale a escolha guardada (ostinato-leve: 1 ou 0); sem escolha, liga sozinho com até 4 GB de memória ou até 2 núcleos.
+   ?leve=1 ou ?leve=0 no endereço forçam, sem guardar. O botão fica no pé do menu do app. */
+(function(){var R=document.documentElement,K="ostinato-leve";
+ function ligado(){return R.hasAttribute("data-leve")}
+ function poe(v){if(v)R.setAttribute("data-leve","");else R.removeAttribute("data-leve")}
+ function rot(){var b=document.getElementById("leve-bt");if(b){b.textContent=ligado()?"Desligar modo leve":"Ligar modo leve";b.setAttribute("aria-pressed",ligado())}}
+ var v=null,q=/[?&]leve=([01])/.exec(location.search);
+ try{v=localStorage.getItem(K)}catch(e){}
+ if(q)v=q[1];
+ if(v!=="1"&&v!=="0"){var m=navigator.deviceMemory,c=navigator.hardwareConcurrency;v=((m&&m<=4)||(c&&c<=2))?"1":"0"}
+ poe(v==="1");
+ document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest("#leve-bt");if(!b)return;
+  poe(!ligado());try{localStorage.setItem(K,ligado()?"1":"0")}catch(e){}rot();
+  var T=window.Rastro&&window.Rastro.toast;if(T)T(ligado()?"Modo leve ligado: o vidro fica sem desfoque.":"Modo leve desligado: o desfoque do vidro voltou.")});
+ document.addEventListener("DOMContentLoaded",rot)})();</script>
 </head>
 <body>
 <a class="pula" href="#site">Pular para o conteúdo</a>
@@ -421,6 +437,7 @@
         <button class="link" data-act="atalhos">Atalhos do teclado</button>
         <button class="link" data-act="theme">Claro ou escuro</button>
         <button class="link" data-avx="rostos" id="rostos-bt" title="Troca todos os rostos pelas iniciais, para compartilhar a tela">Esconder rostos</button>
+        <button class="link" id="leve-bt" title="Tira o desfoque do vidro, para o app ficar mais rápido em computador mais lento">Ligar modo leve</button>
         <button class="link" data-act="nav" data-to="inicio">Sair da demonstração</button>
       </div>
     </aside>
@@ -432,16 +449,16 @@
 <div id="pop" role="dialog" aria-label="Opções do horário" hidden></div>
 <div id="toast" role="status" hidden></div>
 
-<script src="js/personagens.js?v=61"></script>
-<script src="js/pacientes.js?v=61"></script>
-<script src="js/financeiro.js?v=61"></script>
-<script src="js/app.js?v=61"></script>
-<script src="js/hoje.js?v=61"></script>
-<script src="js/busca.js?v=61"></script>
-<script src="js/caderno.js?v=61"></script>
-<script src="js/modelos.js?v=61"></script>
-<script src="js/lousa.js?v=61"></script>
-<script src="js/mapa.js?v=61"></script>
-<script src="js/sessao.js?v=61"></script>
+<script src="js/personagens.js?v=62"></script>
+<script src="js/pacientes.js?v=62"></script>
+<script src="js/financeiro.js?v=62"></script>
+<script src="js/app.js?v=62"></script>
+<script src="js/hoje.js?v=62"></script>
+<script src="js/busca.js?v=62"></script>
+<script src="js/caderno.js?v=62"></script>
+<script src="js/modelos.js?v=62"></script>
+<script src="js/lousa.js?v=62"></script>
+<script src="js/mapa.js?v=62"></script>
+<script src="js/sessao.js?v=62"></script>
 </body>
 </html>

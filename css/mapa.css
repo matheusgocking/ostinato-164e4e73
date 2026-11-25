@@ -169,7 +169,7 @@
 
 /* ---------- o "i" do mapa (23/11/2026): a legenda abre num balão, por cima do canto do mapa ---------- */
 .mp-info{position:absolute;left:0;top:0;z-index:6}
-.mp-i{display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;background:none;cursor:pointer;color:var(--muted);font:italic 600 15px/1 var(--display)}
+.mp-i{display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;background:none;cursor:pointer;color:var(--muted);font:italic 600 15px/1 var(--serif)}
 .mp-i::before{content:"";position:absolute;width:26px;height:26px;border-radius:50%;border:1.5px solid currentColor;opacity:.7}
 .mp-i:hover,.mp-i[aria-expanded="true"]{color:var(--accent)}
 .mp-i:focus-visible{outline:2px solid var(--accent);outline-offset:-4px;border-radius:50%}
